@@ -3,6 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
+	"os"
+)
+
+var (
+	mpesaApiKey         = os.Getenv("MPESA_KEY")
+	mpesaConsumerSecret = os.Getenv("MPESA_SECRET")
 )
 
 func main() {
