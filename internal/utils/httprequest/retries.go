@@ -2,7 +2,6 @@ package httprequest
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -18,22 +17,20 @@ var (
 )
 
 // RetryDo when given a request it executes the request client with the specified redoes -.
-func RetryDo(req *http.Request, maxRetries int, timeout time.Duration,
+func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Duration,
 	backoffStrategy []time.Duration) (*http.Response, error) {
 
 	if req != nil && req.Body != nil {
-		originalBody, err = copyBody(req.Body)
-		resetBody(req, originalBody)
+		originalBody, err = h.copyBody(req.Body)
+		h.resetBody(req, originalBody)
 	}
 
 	if err != nil {
 		return nil, err
 	}
 
-	AttemptLimit := maxRetries
-
-	if AttemptLimit <= 0 {
-		AttemptLimit = 1
+	if maxRetries <= 0 {
+		maxRetries = 1
 	}
 
 	client := http.Client{
@@ -42,52 +39,36 @@ func RetryDo(req *http.Request, maxRetries int, timeout time.Duration,
 
 	var resp *http.Response
 
-	// number of retries
-	for i := 1; i <= AttemptLimit; i++ {
+	// loop number of retries -
+	for i := 1; i <= maxRetries; i++ {
 		resp, err = client.Do(req)
+
+		if err != nil {
+			// Try reinitializing the request client in case of a failure -.
+			if i < maxRetries {
+				continue
+			}
+			log.Printf("failed initializing http request client. %s \n", err.Error())
+			return nil, fmt.Errorf("failed initialising request %s ", err.Error())
+		}
+
+		resp, err := h.analyseRespErrors(req, resp)
 
 		if err != nil {
 			return nil, err
 		}
 
-		log.Printf("%d RETRYING STATUS CODE %d ON URL %s", i, resp.StatusCode, resp.Request.URL)
-
-		// The status code is withing the 400-499 range and thus contains error message -.
-		if err == nil && resp.StatusCode >= 400 && resp.StatusCode < 500 {
-			var r interface{}
-
-			// Checking for error 404 specifically since we know its mainly caused by the url being invalid -.
-			if resp.StatusCode == 404 {
-				return nil, fmt.Errorf("resource url %s not found", req.URL)
+		// The request is successful and exit the for loop with a return -.
+		if resp != nil && err == nil {
+			err := resp.Body.Close()
+			if err != nil {
+				return nil, err
 			}
-
-			decodeErr := json.NewDecoder(resp.Body).Decode(&r)
-
-			if decodeErr != nil {
-				return nil, fmt.Errorf("error: %w", decodeErr)
-			}
-
-			rData, er := json.Marshal(r)
-
-			if er != nil {
-				return nil, er
-			}
-
-			return nil, errors.New(string(rData))
-
-		} else if err == nil && resp.StatusCode < 400 {
-			log.Printf("SUCCESSFULLY SENT REQUEST TO %s", req.URL)
 			return resp, nil
 		}
-
-		// If retrying, release
-		if resp != nil {
-			resp.Body.Close()
-		}
-
-		// resetting body
+		// resetting body -.
 		if req.Body != nil {
-			resetBody(req, originalBody)
+			h.resetBody(req, originalBody)
 		}
 
 		time.Sleep(backoffStrategy[i-1] + 1*time.Microsecond)
@@ -97,18 +78,44 @@ func RetryDo(req *http.Request, maxRetries int, timeout time.Duration,
 	return nil, fmt.Errorf("something went wrong please try again later")
 }
 
+// check the response status codes and chose on which to retry with -.
+func (h HttpRequest) analyseRespErrors(req *http.Request, resp *http.Response) (*http.Response, error) {
+	var processedResponse *http.Response
+	var err error
+	// The status code is withing the 400-499 range and thus contains error message -.
+	if resp.StatusCode >= 400 && resp.StatusCode < 500 && resp.StatusCode != 429 {
+		processedResponse = nil
+		err = fmt.Errorf("failed with status code %d", resp.StatusCode)
+
+	} else if resp.StatusCode < 400 {
+		log.Printf("SUCCESSFULLY SENT REQUEST TO %s", req.URL)
+		processedResponse = resp
+		err = nil
+
+	} else if resp.StatusCode >= 500 {
+		processedResponse = nil
+		err = nil
+
+	}
+
+	return processedResponse, err
+}
+
 // Copying the body so that the original body with resources can be released -.
-func copyBody(src io.ReadCloser) ([]byte, error) {
+func (h HttpRequest) copyBody(src io.ReadCloser) ([]byte, error) {
 	b, err := ioutil.ReadAll(src)
 	if err != nil {
 		return nil, errors.New("Error reading the request body ")
 	}
-	src.Close()
+	err = src.Close()
+	if err != nil {
+		return nil, err
+	}
 	return b, nil
 }
 
 // Resetting in order to close the request body to avoid keeping it open all the time -.
-func resetBody(request *http.Request, originalBody []byte) {
+func (h HttpRequest) resetBody(request *http.Request, originalBody []byte) {
 	request.Body = io.NopCloser(bytes.NewBuffer(originalBody))
 	request.GetBody = func() (io.ReadCloser, error) {
 		return io.NopCloser(bytes.NewBuffer(originalBody)), nil
