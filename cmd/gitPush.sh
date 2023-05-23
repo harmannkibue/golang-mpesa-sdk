@@ -14,11 +14,9 @@ git add .
 if git diff-index --quiet HEAD --; then
   echo "No changes to commit."
 else
-  # Prompt for a commit message
-  read -rp "Enter a commit message: " COMMIT_MESSAGE
 
   # Commit changes with the provided message
-  git commit -m "$COMMIT_MESSAGE"
+  git commit
 
   # Push the changes to the remote branch
   git push --verbose origin "$BRANCH"
