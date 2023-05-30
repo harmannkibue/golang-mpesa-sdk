@@ -7,24 +7,20 @@ import (
 	"time"
 )
 
-var BackOffStrategy = []time.Duration{
-	1 * time.Second,
-	3 * time.Second,
-	4 * time.Second,
-}
-
 // PerformPost used to perform raw post request -.
-func (h HttpRequest) PerformPost(args RequestDataParams) (*http.Response, error) {
+func (h HttpRequest) PerformPost(args RequestDataParams, backOffStrategy []time.Duration, headers map[string]string) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodPost, args.Endpoint, bytes.NewBuffer(args.Data))
 
 	if err != nil {
 		return nil, err
 	}
 
-	// Setting the necessary headers even for authentication token to formance -.
-	req.Header.Set("Content-Type", args.ContentType)
+	// Setting the necessary headers -.
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
 
-	data, err := h.RetryDo(req, 3, time.Second*10, BackOffStrategy)
+	data, err := h.RetryDo(req, 3, time.Second*10, backOffStrategy)
 
 	if err != nil {
 		log.Println("ERROR EXECUTING POST REQUEST CLIENT ", err.Error())

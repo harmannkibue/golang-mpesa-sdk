@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
+	"log"
 	"os"
 )
 
@@ -11,19 +12,18 @@ var (
 )
 
 func main() {
-	fmt.Printf("Safaricom: %s AND %s ", os.Getenv("MPESA_KEY"), os.Getenv("MPESA_SECRET"))
 
-	//httpReq := httprequest.HttpRequest{}
-	//
-	//resp, err := httpReq.PerformPost(httprequest.RequestDataParams{
-	//	Endpoint:    "https://webhook.site/93e45dd0-d2ce-42e9-8f90-a55767a4e982",
-	//	ContentType: "application/json",
-	//	Data:        []byte(`{"key": "value"}`),
-	//})
-	//
-	//if err != nil {
-	//	return
-	//}
+	darajaService, err := daraja.New(os.Getenv("MPESA_KEY"), os.Getenv("MPESA_SECRET"), daraja.SANDBOX)
 
-	//fmt.Println("THE RESPONSE ISS ", resp.StatusCode)
+	if err != nil {
+		log.Println("failed initializing safaricom daraja client ", err)
+	}
+
+	token, err := darajaService.getToken()
+
+	if err != nil {
+		log.Println("The token not found")
+	}
+
+	log.Println("THE TOKEN ISS ", token)
 }

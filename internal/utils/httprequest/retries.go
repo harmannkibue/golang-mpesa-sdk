@@ -60,16 +60,10 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 
 		// The request is successful and exit the for loop with a return -.
 		if resp != nil && err == nil {
-			err := resp.Body.Close()
-			if err != nil {
-				return nil, err
-			}
 			return resp, nil
 		}
 		// resetting body -.
-		if req.Body != nil {
-			h.resetBody(req, originalBody)
-		}
+		h.resetBody(req, originalBody)
 
 		time.Sleep(backoffStrategy[i-1] + 1*time.Microsecond)
 	}
