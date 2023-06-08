@@ -44,5 +44,4 @@ func (p *CacheParams) SetCacheValue(cacheValue string) error {
 	p.Cache.Set(p.Key, cacheValue, p.ExpiresIn)
 
 	return nil
-
 }

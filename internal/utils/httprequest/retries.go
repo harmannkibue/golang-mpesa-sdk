@@ -72,7 +72,7 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 	return nil, fmt.Errorf("something went wrong please try again later")
 }
 
-// check the response status codes and chose on which to retry with -.
+// analyseRespErrors check the response status codes and chose on which to retry with -.
 func (h HttpRequest) analyseRespErrors(req *http.Request, resp *http.Response) (*http.Response, error) {
 	var processedResponse *http.Response
 	var err error
@@ -89,18 +89,19 @@ func (h HttpRequest) analyseRespErrors(req *http.Request, resp *http.Response) (
 	} else if resp.StatusCode >= 500 {
 		processedResponse = nil
 		err = nil
-
 	}
 
 	return processedResponse, err
 }
 
-// Copying the body so that the original body with resources can be released -.
+// copyBody Copying the body so that the original body with resources can be released -.
 func (h HttpRequest) copyBody(src io.ReadCloser) ([]byte, error) {
 	b, err := ioutil.ReadAll(src)
+
 	if err != nil {
-		return nil, errors.New("Error reading the request body ")
+		return nil, errors.New("error reading the request body")
 	}
+
 	err = src.Close()
 	if err != nil {
 		return nil, err
@@ -108,7 +109,7 @@ func (h HttpRequest) copyBody(src io.ReadCloser) ([]byte, error) {
 	return b, nil
 }
 
-// Resetting in order to close the request body to avoid keeping it open all the time -.
+// resetBody Resetting in order to close the request body to avoid keeping it open all the time -.
 func (h HttpRequest) resetBody(request *http.Request, originalBody []byte) {
 	request.Body = io.NopCloser(bytes.NewBuffer(originalBody))
 	request.GetBody = func() (io.ReadCloser, error) {
