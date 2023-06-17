@@ -29,10 +29,10 @@ func main() {
 	})
 
 	if err != nil {
-		fmt.Errorf("THE ERROR IN C2B ", err)
+		log.Println("ERROR registering c2b URLs ", err.Error())
 	}
 
-	fmt.Printf("THE RES SS %+v ", regUrl)
+	fmt.Printf("Register C2B URLs response %+v ", regUrl)
 
 	// TODO: Rearrange the examples correctly 1
 	//token, err := darajaService.getToken()
