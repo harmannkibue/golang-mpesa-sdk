@@ -41,9 +41,11 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 
 	// loop number of retries -
 	for i := 1; i <= maxRetries; i++ {
+
 		resp, err = client.Do(req)
 
 		if err != nil {
+
 			// Try reinitializing the request client in case of a failure -.
 			if i < maxRetries {
 				continue
@@ -67,6 +69,8 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 
 		time.Sleep(backoffStrategy[i-1] + 1*time.Microsecond)
 	}
+
+	fmt.Println("FININISED EHHEHHRE")
 
 	// Here, it means that retrying is useless -.
 	return nil, fmt.Errorf("something went wrong please try again later")

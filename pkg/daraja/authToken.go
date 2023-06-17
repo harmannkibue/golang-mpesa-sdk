@@ -17,18 +17,15 @@ type tokenResponse struct {
 func (s DarajaService) getToken() (string, error) {
 	darajaToken, err := s.Cache.GetCacheValue()
 
-	fmt.Println("CACHE GOTTEN FROM STORE ", darajaToken)
-
 	if err != nil {
-		//The token is not found.
+		//The token is not found -.
 		tokenValue, err := s.fetchTokenFromMpesa()
 
 		if err != nil {
 			return "", err
 		}
 
-		// Fetch it from mpesa and set it in the cache
-
+		// Fetch it from mpesa and set it in the cache -.
 		err = s.Cache.SetCacheValue(tokenValue)
 
 		if err != nil {
@@ -49,21 +46,22 @@ func (s DarajaService) fetchTokenFromMpesa() (string, error) {
 	url := s.baseURL() + "oauth/v1/generate?grant_type=client_credentials"
 	req, err := http.NewRequest(http.MethodGet, url, strings.NewReader(encoded))
 	if err != nil {
-		return "", err
+		return "failed initializing request", err
 	}
+
 	req.Header.Add("authorization", "Basic "+encoded)
 	req.Header.Add("cache-control", "no-cache")
 
 	response, err := s.HttpRequest.RetryDo(req, 3, time.Second*10, BackOffStrategy)
 
 	if err != nil {
-		return "", fmt.Errorf("failed to fetch token %v ", err)
+		return "failed retrying ", fmt.Errorf("failed to fetch token %v ", err)
 	}
 
 	var tokenResp tokenResponse
 	err = json.NewDecoder(response.Body).Decode(&tokenResp)
 	if err != nil {
-		return "", fmt.Errorf("could not decode auth response: %v", err)
+		return "encoding error ", fmt.Errorf("could not decode auth response: %v", err)
 	}
 
 	accessToken := tokenResp.AccessToken
