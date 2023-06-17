@@ -2,23 +2,44 @@ package main
 
 import (
 	"fmt"
-	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
+	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
+	"log"
+	"os"
+)
+
+var (
+	mpesaApiKey         = os.Getenv("MPESA_KEY")
+	mpesaConsumerSecret = os.Getenv("MPESA_SECRET")
 )
 
 func main() {
-	fmt.Println("Heere in the main function!")
 
-	httpReq := httprequest.HttpRequest{}
+	darajaService, err := daraja.New(os.Getenv("MPESA_KEY"), os.Getenv("MPESA_SECRET"), daraja.SANDBOX)
 
-	resp, err := httpReq.PerformPost(httprequest.RequestDataParams{
-		Endpoint:    "https://webhook.site/93e45dd0-d2ce-42e9-8f90-a55767a4e982",
-		ContentType: "application/json",
-		Data:        []byte(`{"key": "value"}`),
+	if err != nil {
+		log.Println("failed initializing safaricom daraja client ", err)
+	}
+
+	//TODO: Rearrange the examples correctly 2
+	regUrl, err := darajaService.C2BRegisterURL(daraja.RegisterC2BURL{
+		ShortCode:       "600989",
+		ResponseType:    "Completed",
+		ConfirmationURL: "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65",
+		ValidationURL:   "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65",
 	})
 
 	if err != nil {
-		return
+		log.Println("ERROR registering c2b URLs ", err.Error())
 	}
 
-	fmt.Println("THE RESPONSE ISS ", resp.StatusCode)
+	fmt.Printf("Register C2B URLs response %+v ", regUrl)
+
+	// TODO: Rearrange the examples correctly 1
+	//token, err := darajaService.getToken()
+	//
+	//if err != nil {
+	//	log.Println("The token not found")
+	//}
+	//
+	//log.Println("THE TOKEN ISS ", token)
 }
