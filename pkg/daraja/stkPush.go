@@ -3,7 +3,6 @@ package daraja
 import (
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
 	"time"
 )
@@ -58,7 +57,6 @@ func (s DarajaService) InitiateStkPush(stkRequest STKPushBody) (*StkPushResponse
 	headers["Cache-Control"] = "no-cache"
 
 	url := s.baseURL() + "mpesa/stkpush/v1/processrequest"
-	//url := "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65"
 
 	response, err := s.HttpRequest.PerformPost(httprequest.RequestDataParams{
 		Endpoint: url,
@@ -70,8 +68,6 @@ func (s DarajaService) InitiateStkPush(stkRequest STKPushBody) (*StkPushResponse
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Printf("THE STK RESPONSE %+v", response)
 
 	var stkResponse StkPushResponse
 	err = json.NewDecoder(response.Body).Decode(&stkResponse)

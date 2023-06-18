@@ -53,7 +53,6 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 			log.Printf("failed initializing http request client. %s \n", err.Error())
 			return nil, fmt.Errorf("failed initialising request %s ", err.Error())
 		}
-		fmt.Println("THR RESPONSE ", req)
 
 		resp, err := h.analyseRespErrors(req, resp)
 
