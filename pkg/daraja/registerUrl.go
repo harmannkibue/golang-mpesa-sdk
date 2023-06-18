@@ -13,7 +13,7 @@ func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURL) (*RegisterC
 		return nil, err
 	}
 
-	token, err := s.getToken()
+	token, err := s.GetToken()
 
 	if err != nil {
 		return nil, err

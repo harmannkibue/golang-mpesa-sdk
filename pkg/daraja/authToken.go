@@ -14,7 +14,7 @@ type tokenResponse struct {
 }
 
 // Fetching the token from safaricom daraja API -.
-func (s DarajaService) getToken() (string, error) {
+func (s DarajaService) GetToken() (string, error) {
 	darajaToken, err := s.Cache.GetCacheValue()
 
 	if err != nil {
@@ -45,6 +45,7 @@ func (s DarajaService) fetchTokenFromMpesa() (string, error) {
 
 	url := s.baseURL() + "oauth/v1/generate?grant_type=client_credentials"
 	req, err := http.NewRequest(http.MethodGet, url, strings.NewReader(encoded))
+
 	if err != nil {
 		return "failed initializing request", err
 	}
@@ -60,6 +61,7 @@ func (s DarajaService) fetchTokenFromMpesa() (string, error) {
 
 	var tokenResp tokenResponse
 	err = json.NewDecoder(response.Body).Decode(&tokenResp)
+
 	if err != nil {
 		return "encoding error ", fmt.Errorf("could not decode auth response: %v", err)
 	}
