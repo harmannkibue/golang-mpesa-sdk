@@ -3,10 +3,9 @@ package daraja
 import (
 	"encoding/json"
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
-	"log"
 )
 
-func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURL) (*RegisterC2BURLResponse, error) {
+func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURLBody) (*RegisterC2BURLResponse, error) {
 	body, err := json.Marshal(c2bRegisterURL)
 
 	if err != nil {
@@ -40,8 +39,9 @@ func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURL) (*RegisterC
 	// Unmarshal the response body into the RegisterC2BURLResponse struct
 	var registerResponse RegisterC2BURLResponse
 	err = json.NewDecoder(response.Body).Decode(&registerResponse)
+
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	return &registerResponse, nil
