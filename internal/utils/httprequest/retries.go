@@ -70,8 +70,6 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 		time.Sleep(backoffStrategy[i-1] + 1*time.Microsecond)
 	}
 
-	fmt.Println("FININISED EHHEHHRE")
-
 	// Here, it means that retrying is useless -.
 	return nil, fmt.Errorf("something went wrong please try again later")
 }
@@ -84,7 +82,6 @@ func (h HttpRequest) analyseRespErrors(req *http.Request, resp *http.Response) (
 	if resp.StatusCode >= 400 && resp.StatusCode < 500 && resp.StatusCode != 429 {
 		processedResponse = nil
 		err = fmt.Errorf("failed with status code %d", resp.StatusCode)
-
 	} else if resp.StatusCode < 400 {
 		log.Printf("SUCCESSFULLY SENT REQUEST TO %s", req.URL)
 		processedResponse = resp
