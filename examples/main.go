@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
 	"os"
@@ -20,7 +19,27 @@ func main() {
 		log.Println("failed initializing safaricom daraja client ", err)
 	}
 
-	//TODO: Rearrange the examples correctly 2
+	// Implements getting token from daraja, if not available in the memory cache -.
+	token, err := darajaToken(darajaService)
+
+	if err != nil {
+		log.Println("Error fetching token ", err.Error())
+	}
+
+	log.Println("Daraja Token ", token)
+
+	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
+
+	if err != nil {
+		log.Println("Error registering a URL ", err.Error())
+	}
+
+	log.Println("Register URL response code ", confirmationResponseCode)
+
+}
+
+func registerConfirmationUrl(darajaService *daraja.DarajaService) (string, error) {
 	regUrl, err := darajaService.C2BRegisterURL(daraja.RegisterC2BURL{
 		ShortCode:       "600989",
 		ResponseType:    "Completed",
@@ -29,17 +48,17 @@ func main() {
 	})
 
 	if err != nil {
-		log.Println("ERROR registering c2b URLs ", err.Error())
+		return "", err
+	}
+	return regUrl.ResponseCode, nil
+}
+
+func darajaToken(darajaService *daraja.DarajaService) (string, error) {
+	token, err := darajaService.GetToken()
+
+	if err != nil {
+		return "", err
 	}
 
-	fmt.Printf("Register C2B URLs response %+v ", regUrl)
-
-	// TODO: Rearrange the examples correctly 1
-	//token, err := darajaService.getToken()
-	//
-	//if err != nil {
-	//	log.Println("The token not found")
-	//}
-	//
-	//log.Println("THE TOKEN ISS ", token)
+	return token, nil
 }
