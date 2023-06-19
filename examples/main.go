@@ -14,7 +14,6 @@ var (
 )
 
 func main() {
-
 	// Initialize daraja service. PassKey is provided on your portal for sandbox,
 	// while it is shared on your go live email from apisupport@safaricom.co.ke
 	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
