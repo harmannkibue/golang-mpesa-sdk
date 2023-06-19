@@ -24,7 +24,7 @@ type completeStkRequestBody struct {
 func (s DarajaService) InitiateStkPush(stkRequest STKPushBody) (*StkPushResponse, error) {
 	timestamp := time.Now().Format("20060102150405")
 
-	passwordMessage := stkRequest.BusinessShortCode + s.ApiSecret + timestamp
+	passwordMessage := stkRequest.BusinessShortCode + s.ApiPassKey + timestamp
 	password := base64.StdEncoding.EncodeToString([]byte(passwordMessage))
 
 	body, err := json.Marshal(completeStkRequestBody{

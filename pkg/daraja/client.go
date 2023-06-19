@@ -26,11 +26,12 @@ type DarajaService struct {
 	HttpRequest httprequest.IhttpRequest
 	ApiKey      string
 	ApiSecret   string
+	ApiPassKey  string
 	Env         int
 }
 
 // New return a new Mpesa DarajaService -.
-func New(appKey, appSecret string, env int) (*DarajaService, error) {
+func New(appKey, appSecret, appPassKey string, env int) (*DarajaService, error) {
 
 	if SANDBOX != env && env != PRODUCTION {
 		return nil, fmt.Errorf("invalid env tag.Pass SANDBOX or PRODUCTION")
@@ -38,7 +39,8 @@ func New(appKey, appSecret string, env int) (*DarajaService, error) {
 	cache := httpCaching.New("darajaToken", 60*time.Minute)
 	httpReq := httprequest.New()
 
-	return &DarajaService{cache, httpReq, appKey, appSecret, env}, nil
+	return &DarajaService{Cache: cache, HttpRequest: httpReq, ApiKey: appKey, ApiSecret: appSecret, ApiPassKey: appPassKey, Env: env}, nil
+
 }
 
 // base url determined by the environment tags passed -.
