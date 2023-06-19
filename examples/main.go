@@ -10,11 +10,12 @@ var (
 	// Set environment variables for daraja before testing -.
 	mpesaApiKey         = os.Getenv("MPESA_KEY")
 	mpesaConsumerSecret = os.Getenv("MPESA_SECRET")
+	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
 )
 
 func main() {
 
-	darajaService, err := daraja.New(os.Getenv("MPESA_KEY"), os.Getenv("MPESA_SECRET"), daraja.SANDBOX)
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
 
 	if err != nil {
 		log.Println("failed initializing safaricom daraja client ", err)
