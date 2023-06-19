@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
 	"os"
@@ -31,28 +32,52 @@ func main() {
 
 	log.Println("Daraja Token ", token)
 
-	// Implements stk push service -.
-	stkRes, err := initiateStkPush(darajaService)
-
-	if err != nil {
-		log.Println("Error in stk push initiation ", err.Error())
-	}
-
-	log.Printf("STKPUSH response is %+v \n", stkRes)
-
-	//// Implements registering a confirmation and validation url.If response code is zero then it passed -.
-	//confirmationResponseCode, err := registerConfirmationUrl(darajaService)
+	//// Implements stk push service -.
+	//stkRes, err := initiateStkPush(darajaService)
 	//
 	//if err != nil {
-	//	log.Println("Error registering a URL ", err.Error())
+	//	log.Println("Error in stk push initiation ", err.Error())
 	//}
-	//
-	//log.Println("Register URL response code ", confirmationResponseCode)
+	// log.Printf("STKPUSH response is %+v \n", stkRes)
+
+	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
+
+	if err != nil {
+		log.Println("Error registering a URL ", err.Error())
+	}
+
+	log.Println("Register URL response code ", confirmationResponseCode)
+
+	// Simulate C2B transaction -.
+	simulateResponse, err := simulateC2BPayment(darajaService)
+
+	if err != nil {
+		log.Println("Error simulating C2B request: ", err.Error())
+	}
+
+	fmt.Printf("C2B Response: %+v \n ", simulateResponse)
 
 }
 
+func simulateC2BPayment(darajaService *daraja.DarajaService) (*daraja.C2BSimulateResponse, error) {
+	simulateResponse, err := darajaService.C2BSimulate(daraja.C2BSimulateRequestBody{
+		ShortCode:     600982,
+		CommandID:     "CustomerPayBillOnline",
+		Amount:        1,
+		Msisdn:        254708374149,
+		BillRefNumber: "VIrtual Account",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return simulateResponse, nil
+}
+
 // Calls the service to initiate stk push -.
-func initiateStkPush(darajaService *daraja.DarajaService) (string, error) {
+func initiateStkPush(darajaService *daraja.DarajaService) (*daraja.StkPushResponse, error) {
 	// "CustomerPayBillOnline" for PayBill Numbers and "CustomerBuyGoodsOnline" for Till Numbers.
 	stkRes, err := darajaService.InitiateStkPush(daraja.STKPushBody{
 		BusinessShortCode: "174379",
@@ -67,10 +92,10 @@ func initiateStkPush(darajaService *daraja.DarajaService) (string, error) {
 	})
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return stkRes.MerchantRequestID, nil
+	return stkRes, nil
 }
 
 // Calls service to register urls -.

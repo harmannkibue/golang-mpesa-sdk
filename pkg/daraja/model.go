@@ -39,3 +39,19 @@ type StkPushResponse struct {
 	ErrorCode           string `json:"errorCode,omitempty"`
 	ErrorMessage        string `json:"errorMessage,omitempty"`
 }
+
+// C2BSimulateRequestBody --> This is the request body for simulating a C2B payment -.
+type C2BSimulateRequestBody struct {
+	ShortCode     int    `json:"ShortCode"`
+	CommandID     string `json:"CommandID"`
+	Amount        int    `json:"Amount"`
+	Msisdn        int64  `json:"Msisdn"`
+	BillRefNumber string `json:"BillRefNumber"`
+}
+
+// C2BSimulateResponse -.
+type C2BSimulateResponse struct {
+	OriginatorCoversationID string `json:"OriginatorCoversationID"`
+	ResponseCode            string `json:"ResponseCode"`
+	ResponseDescription     string `json:"ResponseDescription"`
+}
