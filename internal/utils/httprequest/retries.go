@@ -70,8 +70,6 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 		time.Sleep(backoffStrategy[i-1] + 1*time.Microsecond)
 	}
 
-	fmt.Printf("THE REQUEST BODY %+v \n ", req.Body)
-
 	// Here, it means that retrying is useless -.
 	return nil, fmt.Errorf("something went wrong please try again later")
 }
