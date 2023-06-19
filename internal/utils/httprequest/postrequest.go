@@ -23,7 +23,7 @@ func (h HttpRequest) PerformPost(args RequestDataParams, backOffStrategy []time.
 	data, err := h.RetryDo(req, 3, time.Second*10, backOffStrategy)
 
 	if err != nil {
-		log.Println("ERROR EXECUTING POST REQUEST CLIENT ", err.Error())
+		log.Printf("ERROR: %s EXECUTING POST TO  %s \n", err.Error(), req.URL)
 		return nil, err
 	}
 
