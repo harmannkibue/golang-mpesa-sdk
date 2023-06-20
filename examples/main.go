@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
 	"os"
@@ -32,31 +31,31 @@ func main() {
 
 	log.Println("Daraja Token ", token)
 
-	//// Implements stk push service -.
-	//stkRes, err := initiateStkPush(darajaService)
+	// Implements stk push service -.
+	stkRes, err := initiateStkPush(darajaService)
+
+	if err != nil {
+		log.Println("Error in stk push initiation ", err.Error())
+	}
+	log.Printf("STKPUSH response is %+v \n", stkRes)
+
+	//// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	//confirmationResponseCode, err := registerConfirmationUrl(darajaService)
 	//
 	//if err != nil {
-	//	log.Println("Error in stk push initiation ", err.Error())
+	//	log.Println("Error registering a URL ", err.Error())
 	//}
-	// log.Printf("STKPUSH response is %+v \n", stkRes)
-
-	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
-	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
-
-	if err != nil {
-		log.Println("Error registering a URL ", err.Error())
-	}
-
-	log.Println("Register URL response code ", confirmationResponseCode)
-
-	// Simulate C2B transaction -.
-	simulateResponse, err := simulateC2BPayment(darajaService)
-
-	if err != nil {
-		log.Println("Error simulating C2B request: ", err.Error())
-	}
-
-	fmt.Printf("C2B Response: %+v \n ", simulateResponse)
+	//
+	//log.Println("Register URL response code ", confirmationResponseCode)
+	//
+	//// Simulate C2B transaction -.
+	//simulateResponse, err := simulateC2BPayment(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error simulating C2B request: ", err.Error())
+	//}
+	//
+	//fmt.Printf("C2B Response: %+v \n ", simulateResponse)
 
 }
 
@@ -87,7 +86,7 @@ func initiateStkPush(darajaService *daraja.DarajaService) (*daraja.StkPushRespon
 		PartyB:            "174379",
 		PhoneNumber:       "254728922269",
 		CallBackURL:       "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65",
-		AccountReference:  "Custom unique identifier",
+		AccountReference:  "999200200",
 		TransactionDesc:   "Daraja sdk testing STK push",
 	})
 
