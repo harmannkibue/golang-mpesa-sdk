@@ -77,16 +77,3 @@ type B2CResponseBody struct {
 	ResponseCode             string `json:"ResponseCode"`
 	ResponseDescription      string `json:"ResponseDescription"`
 }
-
-//{
-//"InitiatorName": "testapi",
-//"SecurityCredential": "YL2cUjka1r1YSZsI/9ATatEtK8DruJwyx/leMHV0kr+bUTO6UciatgwkLuVYrHEWScIHYIlomBxXbm3813aVe4mpoUUU2/EAHJPcdbBQTRat1rcuyudv3TYkBR28mA+M+Y+NiyeLLGQkSxLUBPga5xk7z4tjgERoAPnsfmw/NijdS3ArZKZ+WZWPU+WMBvDU5ZouWJVPMzJ99/MCY0LY5TNUNKwYvlxxgjTgpUl4+5k1dQW8VEM61fxUl4aeJx8WKXOZt4bf+XmBLkdVwCaRyacyYoaK89sT53EadfNUU/whytJYcLr7rOHSQDxc5QqkbE4ekhklzjpuGk6ZRhkTTQ==",
-//"CommandID": "BusinessPayment",
-//"Amount": 1,
-//"PartyA": 600426,
-//"PartyB": 254708374149,
-//"Remarks": "Testing B2C",
-//"QueueTimeOutURL": "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65",
-//"ResultURL": "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65",
-//"Occassion": "Testing B2C"
-//}

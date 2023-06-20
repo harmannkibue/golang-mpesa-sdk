@@ -59,6 +59,29 @@ func main() {
 
 }
 
+// Implements business to customer payment -.
+func b2cPayment(darajaService *daraja.DarajaService) (*daraja.B2CResponseBody, error) {
+	b2cPayment, err := darajaService.B2CPayment(daraja.B2CRequestBody{
+		InitiatorName:      "testapi",
+		SecurityCredential: "UKCrm4IVKWEoW640M3pUHS4hZ2ynDpz+LT6c+acBK28TOMULxVhMP0YM2FNCh2QXx+m6HR8iLNsR0bfbIB1kpvNhciKUrn7Glp4f7UNPF8mHXgNsa/09+i7X8+JUy7tQLEOoPE/xCWBOh2ofBq8N+lX77RUAxDp9HC8Nj6nN6kH07Ygmz7NnRd/dlayqcFKV4UNP/nQAV8lum2HSh9xRBnlexcziYipt/d293qrSSvXtAfz+lmgzzbzwML02zlCQxXS2YQjTluQWzRgxkl+9aCCs51a5BWppTE6iYd8qcMlX/+hMZvl2D9LjQKwisSKJsWP2MtxFxG86DRpwI41I4A==",
+		CommandID:          "SalaryPayment",
+		Amount:             1,
+		PartyA:             600998,
+		PartyB:             254728922269,
+		Remarks:            "Payment from VA",
+		QueueTimeOutURL:    "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		ResultURL:          "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		Occassion:          "VA Occasion",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return b2cPayment, nil
+}
+
+// Simulate customer to business payments -.
 func simulateC2BPayment(darajaService *daraja.DarajaService) (*daraja.C2BSimulateResponse, error) {
 	simulateResponse, err := darajaService.C2BSimulate(daraja.C2BSimulateRequestBody{
 		ShortCode:     600982,
