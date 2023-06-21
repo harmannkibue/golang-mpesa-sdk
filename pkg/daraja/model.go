@@ -77,3 +77,34 @@ type B2CResponseBody struct {
 	ResponseCode             string `json:"ResponseCode"`
 	ResponseDescription      string `json:"ResponseDescription"`
 }
+
+// AccountBalanceRequestBody for checking the account balance -.
+type AccountBalanceRequestBody struct {
+	Initiator          string `json:"Initiator"`
+	SecurityCredential string `json:"SecurityCredential"`
+	CommandID          string `json:"CommandID"`
+	PartyA             int    `json:"PartyA"`
+	IdentifierType     int    `json:"IdentifierType"`
+	Remarks            string `json:"Remarks"`
+	QueueTimeOutURL    string `json:"QueueTimeOutURL"`
+	ResultURL          string `json:"ResultURL"`
+}
+
+// AccountBalanceResponseBody acknowledgement response from mpesa -.
+type AccountBalanceResponseBody struct {
+	OriginatorConversationID string `json:"OriginatorConversationID"`
+	ConversationID           string `json:"ConversationID"`
+	ResponseCode             string `json:"ResponseCode"`
+	ResponseDescription      string `json:"ResponseDescription"`
+}
+
+//{
+//"Initiator": "testapi",
+//"SecurityCredential": "J0Pk2QHyUJ0b+iuPDDukHSMdRiLHp916TG81WvyBKr2GQIpUW5blHqt6LRVNiD1VIIWgtjYwMqwUgDfc29wKKs3DiTrcjDF/KdhwcSCYzmxiZg2HSixQ0sS+UCbQwv/KxJ+Ugd+9hCMULeW7NdfZ5ZK04jmUiUw/e2i1hjNnSAKpo9SaPuVLM8OCs9tHbfZxM8PQplb+/r3uFzxzryd1yf2WjrFecrOLOnp7UFCbZhzhdoL/um+1UxvbFYyGdfpC+PaOPr1P9IT0zchVJvCB78ovkLplT4vZadZJ6dY7EaqTX4Bl+MaNBRaEVr+sMIZhUPbRpgzlgaOSyQe13P57NQ==",
+//"CommandID": "AccountBalance",
+//"PartyA": 174379,
+//"IdentifierType": 4,
+//"Remarks": "Checking balance",
+//"QueueTimeOutURL": "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+//"ResultURL": "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+//}

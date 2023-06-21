@@ -13,7 +13,7 @@ type tokenResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
-// Fetching the token from safaricom daraja API -.
+// GetToken Fetching the token from safaricom daraja API -.
 func (s DarajaService) GetToken() (string, error) {
 	darajaToken, err := s.Cache.GetCacheValue()
 
@@ -44,6 +44,7 @@ func (s DarajaService) fetchTokenFromMpesa() (string, error) {
 	encoded := base64.StdEncoding.EncodeToString(b)
 
 	url := s.baseURL() + "oauth/v1/generate?grant_type=client_credentials"
+
 	req, err := http.NewRequest(http.MethodGet, url, strings.NewReader(encoded))
 
 	if err != nil {
