@@ -5,9 +5,9 @@ import (
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
 )
 
-// TransactionStatus checks the account balance for a given short code -.
-func (s DarajaService) TransactionStatus(statusBody TransactionStatusRequestBody) (*TransactionStatusResponseBody, error) {
-	body, err := json.Marshal(statusBody)
+// C2BTransactionReversal reverses C2B payment -.
+func (s DarajaService) C2BTransactionReversal(reversalBody TransactionReversalRequestBody) (*TransactionReversalResponseBody, error) {
+	body, err := json.Marshal(reversalBody)
 
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func (s DarajaService) TransactionStatus(statusBody TransactionStatusRequestBody
 	headers["Authorization"] = "Bearer " + token
 	headers["Cache-Control"] = "no-cache"
 
-	url := s.baseURL() + "mpesa/transactionstatus/v1/query"
+	url := s.baseURL() + "mpesa/reversal/v1/request"
 
 	response, err := s.HttpRequest.PerformPost(httprequest.RequestDataParams{
 		Endpoint: url,
@@ -37,13 +37,13 @@ func (s DarajaService) TransactionStatus(statusBody TransactionStatusRequestBody
 		return nil, err
 	}
 
-	// Unmarshal the response body into the TransactionStatusResponseBody struct
-	var statusResponse TransactionStatusResponseBody
-	err = json.NewDecoder(response.Body).Decode(&statusResponse)
+	// Unmarshal the response body into the TransactionReversalResponseBody struct
+	var reversalResponse TransactionReversalResponseBody
+	err = json.NewDecoder(response.Body).Decode(&reversalResponse)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &statusResponse, nil
+	return &reversalResponse, nil
 }

@@ -65,13 +65,21 @@ func main() {
 	//
 	//fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
 
-	status, err := queryTransactionStatus(darajaService)
+	//status, err := queryTransactionStatus(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("TRANSACTION STATUS RESPONSE ", err.Error())
+	//}
+	//
+	//log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
+
+	reversal, err := reverseC2BPayment(darajaService)
 
 	if err != nil {
-		log.Println("TRANSACTION STATUS RESPONSE ", err.Error())
+		log.Println("C2B REVERSAL ERROR ", err.Error())
 	}
 
-	log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
+	log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
 
 }
 
@@ -184,7 +192,7 @@ func darajaToken(darajaService *daraja.DarajaService) (string, error) {
 }
 
 // Query transaction status for a organisation shortcode, MSISDN or a till number
-func queryTransactionStatus(darajaService *daraja.DarajaService) (*daraja.TransactionStatusRequestResponse, error) {
+func queryTransactionStatus(darajaService *daraja.DarajaService) (*daraja.TransactionStatusResponseBody, error) {
 	status, err := darajaService.TransactionStatus(daraja.TransactionStatusRequestBody{
 		Initiator:          "testapi",
 		SecurityCredential: "g3bMKxJUQ0Eclfk4myd1EmnnVBfLt6Dx39Xh1OBHQsvfOVZIjX+ExK8Z/H+csQYD0g0LX0uMNufXxZll6UwrAxlwTwWZ+L1FunHALRX8bR+V6a8QNthU81iRVTd17iLIkQ3VBlihadCZAWsRakWgF0QhjgsnsYTT1rSIARQLyphbSKzQTS7kKdvST8+0bup90KFZJP0Js1XTj4BDBpsXB1eC62upyHY5XNpW69/6Lwz+QJbGFrhfGSh0qEGY5MzPu8o5kVEl1HZOeTx3P4mUcrLBbuFyYQQgshdIhWwiGVUFHWpiINddtWwd2udiuunT3hEICAn7oR6jROlMRixBxg==",
@@ -204,4 +212,27 @@ func queryTransactionStatus(darajaService *daraja.DarajaService) (*daraja.Transa
 	}
 
 	return status, nil
+}
+
+// reversing a C2B payment -.
+func reverseC2BPayment(darajaService *daraja.DarajaService) (*daraja.TransactionReversalResponseBody, error) {
+	reversal, err := darajaService.C2BTransactionReversal(daraja.TransactionReversalRequestBody{
+		Initiator:              "testapi",
+		SecurityCredential:     "oDx3GjKUpc3LJyPMdjiy2Qy64b+Smfyc8xyPTjYQfpGhVngg8OATaXYla0YazHGtM8rqqlRwGiW30NDTezm81YBpEwCvIWTaR1YN3RmiPPvN+kF03BgX8eCJXVzV/99758nSsEKmleudOMmkegHaTrMOlfjQlcVSiS94u2ZvJejS0X5xpp2dPkplITmpLBh/EpMsB0fJLh7fcrtc8v0V/NJG6Zd6W3d2uB3S6zfJPbc4Iby52iYhAWwFOAbJhrTMVDHKLLCzFXZUZufPpntWcElNAtgEb7AA1Os2FbNyJcrCwT22ATQaU/VMJTjMgMB3Cgdw7Xyw+gMilJ+er/kJzA==",
+		CommandID:              "TransactionReversal",
+		TransactionID:          "OEI2AK4Q16",
+		Amount:                 1,
+		ReceiverParty:          600978,
+		ReceiverIdentifierType: 11,
+		ResultURL:              "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		QueueTimeOutURL:        "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		Remarks:                "REVERSAL REMARK",
+		Occassion:              "REVERSAL OCCASSION",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return reversal, nil
 }

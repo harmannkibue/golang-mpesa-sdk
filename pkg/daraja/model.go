@@ -112,8 +112,31 @@ type TransactionStatusRequestBody struct {
 	Occassion          string `json:"Occassion"`
 }
 
-// TransactionStatusRequestResponse response for initiating transaction status check -.
-type TransactionStatusRequestResponse struct {
+// TransactionStatusResponseBody response for initiating transaction status check -.
+type TransactionStatusResponseBody struct {
+	OriginatorConversationID string `json:"OriginatorConversationID"`
+	ConversationID           string `json:"ConversationID"`
+	ResponseCode             string `json:"ResponseCode"`
+	ResponseDescription      string `json:"ResponseDescription"`
+}
+
+// TransactionReversalRequestBody request body for reversing C2B payments -.
+type TransactionReversalRequestBody struct {
+	Initiator              string `json:"Initiator"`
+	SecurityCredential     string `json:"SecurityCredential"`
+	CommandID              string `json:"CommandID"`
+	TransactionID          string `json:"TransactionID"`
+	Amount                 int    `json:"Amount"`
+	ReceiverParty          int    `json:"ReceiverParty"`
+	ReceiverIdentifierType int    `json:"ReceiverIdentifierType"`
+	ResultURL              string `json:"ResultURL"`
+	QueueTimeOutURL        string `json:"QueueTimeOutURL"`
+	Remarks                string `json:"Remarks"`
+	Occassion              string `json:"Occassion"`
+}
+
+// TransactionReversalResponseBody response after initiating C2B transaction -.
+type TransactionReversalResponseBody struct {
 	OriginatorConversationID string `json:"OriginatorConversationID"`
 	ConversationID           string `json:"ConversationID"`
 	ResponseCode             string `json:"ResponseCode"`
