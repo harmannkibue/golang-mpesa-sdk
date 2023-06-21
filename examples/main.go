@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
 	"os"
@@ -32,39 +31,48 @@ func main() {
 
 	log.Println("Daraja Token ", token)
 
-	// Implements stk push service -.
-	stkRes, err := initiateStkPush(darajaService)
+	//// Implements stk push service -.
+	//stkRes, err := initiateStkPush(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error in stk push initiation ", err.Error())
+	//}
+	//log.Printf("STKPUSH response is %+v \n", stkRes)
+	//
+	//// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	//confirmationResponseCode, err := registerConfirmationUrl(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error registering a URL ", err.Error())
+	//}
+	//
+	//log.Println("Register URL response code ", confirmationResponseCode)
+	//
+	//// Simulate C2B transaction -.
+	//simulateResponse, err := simulateC2BPayment(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error simulating C2B request: ", err.Error())
+	//}
+	//
+	//fmt.Printf("C2B Response: %+v \n ", simulateResponse)
+	//
+	//balance, err := accountBalance(darajaService)
+	//
+	//if err != nil {
+	//	fmt.Println("THE BALANCE ERROR ", err.Error())
+	//}
+	//
+	//fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
+
+	status, err := queryTransactionStatus(darajaService)
 
 	if err != nil {
-		log.Println("Error in stk push initiation ", err.Error())
-	}
-	log.Printf("STKPUSH response is %+v \n", stkRes)
-
-	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
-	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
-
-	if err != nil {
-		log.Println("Error registering a URL ", err.Error())
+		log.Println("TRANSACTION STATUS RESPONSE ", err.Error())
 	}
 
-	log.Println("Register URL response code ", confirmationResponseCode)
+	log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
 
-	// Simulate C2B transaction -.
-	simulateResponse, err := simulateC2BPayment(darajaService)
-
-	if err != nil {
-		log.Println("Error simulating C2B request: ", err.Error())
-	}
-
-	fmt.Printf("C2B Response: %+v \n ", simulateResponse)
-
-	balance, err := accountBalance(darajaService)
-
-	if err != nil {
-		fmt.Println("THE BALANCE ERROR ", err.Error())
-	}
-
-	fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
 }
 
 // checking account balance for both B2C and C2B short codes -.
@@ -74,10 +82,11 @@ func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalance
 		SecurityCredential: "RZiAQmdpGfWEw2HggGwFCOE/1mr2aEfIUVradvgi3vSWzJDrchOXXUQmgKf8Z21NR38AN4n523sXsl3Trcvl2JQx8uylLxTKE+lG5RgfCauzG3qIBkAJCuklo1hJLj5h1CNht8U9Ac011DaN3lpzy39CTjO/Y/BEdSisX72cogeb+GehAZa0Q0opj8XpfAy2nPQ5fosF79P6KDm/pDjyLFamzZIoUGSIBUaEVwCdWm/AkdaXooYV3LWk4pwYkqtDWeFELFW29a2FYRBT6BU2JZttJO8XFmZI/x+U/ZQuQyC5CltA9CdgjXTHrK9LWZ7PoKwCESWbytYH2eddQd3VsA==",
 		CommandID:          "AccountBalance",
 		PartyA:             600991,
-		IdentifierType:     2,
-		Remarks:            "Churpy Balance",
-		QueueTimeOutURL:    "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
-		ResultURL:          "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
+		IdentifierType:  2,
+		Remarks:         "Churpy Balance",
+		QueueTimeOutURL: "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		ResultURL:       "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 	})
 
 	if err != nil {
@@ -172,4 +181,27 @@ func darajaToken(darajaService *daraja.DarajaService) (string, error) {
 	}
 
 	return token, nil
+}
+
+// Query transaction status for a organisation shortcode, MSISDN or a till number
+func queryTransactionStatus(darajaService *daraja.DarajaService) (*daraja.TransactionStatusRequestResponse, error) {
+	status, err := darajaService.TransactionStatus(daraja.TransactionStatusRequestBody{
+		Initiator:          "testapi",
+		SecurityCredential: "g3bMKxJUQ0Eclfk4myd1EmnnVBfLt6Dx39Xh1OBHQsvfOVZIjX+ExK8Z/H+csQYD0g0LX0uMNufXxZll6UwrAxlwTwWZ+L1FunHALRX8bR+V6a8QNthU81iRVTd17iLIkQ3VBlihadCZAWsRakWgF0QhjgsnsYTT1rSIARQLyphbSKzQTS7kKdvST8+0bup90KFZJP0Js1XTj4BDBpsXB1eC62upyHY5XNpW69/6Lwz+QJbGFrhfGSh0qEGY5MzPu8o5kVEl1HZOeTx3P4mUcrLBbuFyYQQgshdIhWwiGVUFHWpiINddtWwd2udiuunT3hEICAn7oR6jROlMRixBxg==",
+		CommandID:          "TransactionStatusQuery",
+		TransactionID:      "OEI2AK4Q16",
+		PartyA:             600996,
+		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
+		IdentifierType:  4,
+		ResultURL:       "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		QueueTimeOutURL: "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		Remarks:         "TRANSACTION STATUS REMARKS",
+		Occassion:       "TRANSACTION STATUS  OCCASSION",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return status, nil
 }
