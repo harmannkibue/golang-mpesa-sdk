@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
 	"os"
@@ -39,24 +40,51 @@ func main() {
 	}
 	log.Printf("STKPUSH response is %+v \n", stkRes)
 
-	//// Implements registering a confirmation and validation url.If response code is zero then it passed -.
-	//confirmationResponseCode, err := registerConfirmationUrl(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error registering a URL ", err.Error())
-	//}
-	//
-	//log.Println("Register URL response code ", confirmationResponseCode)
-	//
-	//// Simulate C2B transaction -.
-	//simulateResponse, err := simulateC2BPayment(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error simulating C2B request: ", err.Error())
-	//}
-	//
-	//fmt.Printf("C2B Response: %+v \n ", simulateResponse)
+	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
 
+	if err != nil {
+		log.Println("Error registering a URL ", err.Error())
+	}
+
+	log.Println("Register URL response code ", confirmationResponseCode)
+
+	// Simulate C2B transaction -.
+	simulateResponse, err := simulateC2BPayment(darajaService)
+
+	if err != nil {
+		log.Println("Error simulating C2B request: ", err.Error())
+	}
+
+	fmt.Printf("C2B Response: %+v \n ", simulateResponse)
+
+	balance, err := accountBalance(darajaService)
+
+	if err != nil {
+		fmt.Println("THE BALANCE ERROR ", err.Error())
+	}
+
+	fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
+}
+
+// checking account balance for both B2C and C2B short codes -.
+func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalanceResponseBody, error) {
+	balance, err := darajaService.QueryAccountBalance(daraja.AccountBalanceRequestBody{
+		Initiator:          "testapi",
+		SecurityCredential: "RZiAQmdpGfWEw2HggGwFCOE/1mr2aEfIUVradvgi3vSWzJDrchOXXUQmgKf8Z21NR38AN4n523sXsl3Trcvl2JQx8uylLxTKE+lG5RgfCauzG3qIBkAJCuklo1hJLj5h1CNht8U9Ac011DaN3lpzy39CTjO/Y/BEdSisX72cogeb+GehAZa0Q0opj8XpfAy2nPQ5fosF79P6KDm/pDjyLFamzZIoUGSIBUaEVwCdWm/AkdaXooYV3LWk4pwYkqtDWeFELFW29a2FYRBT6BU2JZttJO8XFmZI/x+U/ZQuQyC5CltA9CdgjXTHrK9LWZ7PoKwCESWbytYH2eddQd3VsA==",
+		CommandID:          "AccountBalance",
+		PartyA:             600991,
+		IdentifierType:     2,
+		Remarks:            "Churpy Balance",
+		QueueTimeOutURL:    "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		ResultURL:          "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return balance, nil
 }
 
 // Implements business to customer payment -.
@@ -103,12 +131,12 @@ func initiateStkPush(darajaService *daraja.DarajaService) (*daraja.StkPushRespon
 	// "CustomerPayBillOnline" for PayBill Numbers and "CustomerBuyGoodsOnline" for Till Numbers.
 	stkRes, err := darajaService.InitiateStkPush(daraja.STKPushBody{
 		BusinessShortCode: "174379",
-		TransactionType:   "CustomerPayBillOnline",
+		TransactionType:   "CustomerBuyGoodsOnline",
 		Amount:            "1",
 		PartyA:            "254728922269",
 		PartyB:            "174379",
 		PhoneNumber:       "254728922269",
-		CallBackURL:       "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65",
+		CallBackURL:       "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		AccountReference:  "999200200",
 		TransactionDesc:   "Daraja sdk testing STK push",
 	})
