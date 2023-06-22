@@ -78,15 +78,67 @@ type B2CResponseBody struct {
 	ResponseDescription      string `json:"ResponseDescription"`
 }
 
-//{
-//"InitiatorName": "testapi",
-//"SecurityCredential": "YL2cUjka1r1YSZsI/9ATatEtK8DruJwyx/leMHV0kr+bUTO6UciatgwkLuVYrHEWScIHYIlomBxXbm3813aVe4mpoUUU2/EAHJPcdbBQTRat1rcuyudv3TYkBR28mA+M+Y+NiyeLLGQkSxLUBPga5xk7z4tjgERoAPnsfmw/NijdS3ArZKZ+WZWPU+WMBvDU5ZouWJVPMzJ99/MCY0LY5TNUNKwYvlxxgjTgpUl4+5k1dQW8VEM61fxUl4aeJx8WKXOZt4bf+XmBLkdVwCaRyacyYoaK89sT53EadfNUU/whytJYcLr7rOHSQDxc5QqkbE4ekhklzjpuGk6ZRhkTTQ==",
-//"CommandID": "BusinessPayment",
-//"Amount": 1,
-//"PartyA": 600426,
-//"PartyB": 254708374149,
-//"Remarks": "Testing B2C",
-//"QueueTimeOutURL": "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65",
-//"ResultURL": "https://webhook.site/c882c5f6-4209-4f12-911b-85f13a69eb65",
-//"Occassion": "Testing B2C"
-//}
+// AccountBalanceRequestBody for checking the account balance -.
+type AccountBalanceRequestBody struct {
+	Initiator          string `json:"Initiator"`
+	SecurityCredential string `json:"SecurityCredential"`
+	CommandID          string `json:"CommandID"`
+	PartyA             int    `json:"PartyA"`
+	IdentifierType     int    `json:"IdentifierType"`
+	Remarks            string `json:"Remarks"`
+	QueueTimeOutURL    string `json:"QueueTimeOutURL"`
+	ResultURL          string `json:"ResultURL"`
+}
+
+// AccountBalanceResponseBody acknowledgement response from mpesa -.
+type AccountBalanceResponseBody struct {
+	OriginatorConversationID string `json:"OriginatorConversationID"`
+	ConversationID           string `json:"ConversationID"`
+	ResponseCode             string `json:"ResponseCode"`
+	ResponseDescription      string `json:"ResponseDescription"`
+}
+
+// TransactionStatusRequestBody  checking the status of a transaction based of the M-Pesa receipt number -.
+type TransactionStatusRequestBody struct {
+	Initiator          string `json:"Initiator"`
+	SecurityCredential string `json:"SecurityCredential"`
+	CommandID          string `json:"CommandID"`
+	TransactionID      string `json:"TransactionID"`
+	PartyA             int    `json:"PartyA"`
+	IdentifierType     int    `json:"IdentifierType"`
+	ResultURL          string `json:"ResultURL"`
+	QueueTimeOutURL    string `json:"QueueTimeOutURL"`
+	Remarks            string `json:"Remarks"`
+	Occassion          string `json:"Occassion"`
+}
+
+// TransactionStatusResponseBody response for initiating transaction status check -.
+type TransactionStatusResponseBody struct {
+	OriginatorConversationID string `json:"OriginatorConversationID"`
+	ConversationID           string `json:"ConversationID"`
+	ResponseCode             string `json:"ResponseCode"`
+	ResponseDescription      string `json:"ResponseDescription"`
+}
+
+// TransactionReversalRequestBody request body for reversing C2B payments -.
+type TransactionReversalRequestBody struct {
+	Initiator              string `json:"Initiator"`
+	SecurityCredential     string `json:"SecurityCredential"`
+	CommandID              string `json:"CommandID"`
+	TransactionID          string `json:"TransactionID"`
+	Amount                 int    `json:"Amount"`
+	ReceiverParty          int    `json:"ReceiverParty"`
+	ReceiverIdentifierType int    `json:"ReceiverIdentifierType"`
+	ResultURL              string `json:"ResultURL"`
+	QueueTimeOutURL        string `json:"QueueTimeOutURL"`
+	Remarks                string `json:"Remarks"`
+	Occassion              string `json:"Occassion"`
+}
+
+// TransactionReversalResponseBody response after initiating C2B transaction -.
+type TransactionReversalResponseBody struct {
+	OriginatorConversationID string `json:"OriginatorConversationID"`
+	ConversationID           string `json:"ConversationID"`
+	ResponseCode             string `json:"ResponseCode"`
+	ResponseDescription      string `json:"ResponseDescription"`
+}

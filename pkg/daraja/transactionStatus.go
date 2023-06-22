@@ -5,9 +5,9 @@ import (
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
 )
 
-// C2BSimulate Simulate C2B Transaction, mainly for Sandbox -.
-func (s DarajaService) C2BSimulate(c2bSimulateBody C2BSimulateRequestBody) (*C2BSimulateResponse, error) {
-	body, err := json.Marshal(c2bSimulateBody)
+// TransactionStatus checks the account balance for a given short code -.
+func (s DarajaService) TransactionStatus(statusBody TransactionStatusRequestBody) (*TransactionStatusResponseBody, error) {
+	body, err := json.Marshal(statusBody)
 
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func (s DarajaService) C2BSimulate(c2bSimulateBody C2BSimulateRequestBody) (*C2B
 	headers["Authorization"] = "Bearer " + token
 	headers["Cache-Control"] = "no-cache"
 
-	url := s.baseURL() + "mpesa/c2b/v1/simulate"
+	url := s.baseURL() + "mpesa/transactionstatus/v1/query"
 
 	response, err := s.HttpRequest.PerformPost(httprequest.RequestDataParams{
 		Endpoint: url,
@@ -37,13 +37,13 @@ func (s DarajaService) C2BSimulate(c2bSimulateBody C2BSimulateRequestBody) (*C2B
 		return nil, err
 	}
 
-	// Unmarshal the response body into the C2BSimulateResponse struct
-	var c2bSimulateResponse C2BSimulateResponse
-	err = json.NewDecoder(response.Body).Decode(&c2bSimulateResponse)
+	// Unmarshal the response body into the TransactionStatusResponseBody struct
+	var statusResponse TransactionStatusResponseBody
+	err = json.NewDecoder(response.Body).Decode(&statusResponse)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &c2bSimulateResponse, nil
+	return &statusResponse, nil
 }
