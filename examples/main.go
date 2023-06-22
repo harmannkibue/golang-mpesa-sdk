@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
 	"os"
@@ -56,14 +57,14 @@ func main() {
 	//}
 	//
 	//fmt.Printf("C2B Response: %+v \n ", simulateResponse)
-	//
-	//balance, err := accountBalance(darajaService)
-	//
-	//if err != nil {
-	//	fmt.Println("THE BALANCE ERROR ", err.Error())
-	//}
-	//
-	//fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
+
+	balance, err := accountBalance(darajaService)
+
+	if err != nil {
+		fmt.Println("THE BALANCE ERROR ", err.Error())
+	}
+
+	fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
 
 	//status, err := queryTransactionStatus(darajaService)
 	//
@@ -73,13 +74,13 @@ func main() {
 	//
 	//log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
 
-	reversal, err := reverseC2BPayment(darajaService)
-
-	if err != nil {
-		log.Println("C2B REVERSAL ERROR ", err.Error())
-	}
-
-	log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
+	//reversal, err := reverseC2BPayment(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("C2B REVERSAL ERROR ", err.Error())
+	//}
+	//
+	//log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
 
 }
 
