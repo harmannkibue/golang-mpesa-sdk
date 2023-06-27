@@ -2,16 +2,18 @@ package main
 
 import (
 	"fmt"
+	"github.com/harmannkibue/golang-mpesa-sdk/keys"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
-	"os"
 )
 
 var (
 	// Set environment variables for daraja before testing -.
-	mpesaApiKey         = os.Getenv("MPESA_KEY")
-	mpesaConsumerSecret = os.Getenv("MPESA_SECRET")
-	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+	//mpesaApiKey         = os.Getenv("MPESA_KEY")
+	//mpesaConsumerSecret = os.Getenv("MPESA_SECRET")
+	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
+	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
+	mpesaPassKey        = "0f2f587066b975699eac311b466c3cab733b4e73d9d20cacfde56be48d24bc6a"
 )
 
 func main() {
@@ -86,16 +88,21 @@ func main() {
 
 // checking account balance for both B2C and C2B short codes -.
 func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalanceResponseBody, error) {
+	creds, err := keys.DarajaCredentials(darajaService.ApiPassKey)
+
+	if err != nil {
+		return nil, err
+	}
 	balance, err := darajaService.QueryAccountBalance(daraja.AccountBalanceRequestBody{
 		Initiator:          "testapi",
-		SecurityCredential: "RZiAQmdpGfWEw2HggGwFCOE/1mr2aEfIUVradvgi3vSWzJDrchOXXUQmgKf8Z21NR38AN4n523sXsl3Trcvl2JQx8uylLxTKE+lG5RgfCauzG3qIBkAJCuklo1hJLj5h1CNht8U9Ac011DaN3lpzy39CTjO/Y/BEdSisX72cogeb+GehAZa0Q0opj8XpfAy2nPQ5fosF79P6KDm/pDjyLFamzZIoUGSIBUaEVwCdWm/AkdaXooYV3LWk4pwYkqtDWeFELFW29a2FYRBT6BU2JZttJO8XFmZI/x+U/ZQuQyC5CltA9CdgjXTHrK9LWZ7PoKwCESWbytYH2eddQd3VsA==",
+		SecurityCredential: creds,
 		CommandID:          "AccountBalance",
 		PartyA:             600991,
 		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
 		IdentifierType:  2,
 		Remarks:         "Churpy Balance",
-		QueueTimeOutURL: "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
-		ResultURL:       "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		QueueTimeOutURL: "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
+		ResultURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 	})
 
 	if err != nil {
