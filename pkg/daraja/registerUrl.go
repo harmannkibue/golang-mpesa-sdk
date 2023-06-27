@@ -5,6 +5,7 @@ import (
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
 )
 
+// C2BRegisterURL Register C2B url for receiving notifications for all C2B transactions -.
 func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURLBody) (*RegisterC2BURLResponse, error) {
 	body, err := json.Marshal(c2bRegisterURL)
 
