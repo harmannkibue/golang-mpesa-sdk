@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-var (
+const (
 	// Set environment variables for daraja before testing. Here I am using sandbox settings-.
 	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
 	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
@@ -81,6 +81,14 @@ func main() {
 
 	log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
 
+	b2cRes, err := b2cPayment(darajaService)
+
+	if err != nil {
+		log.Println("B2C error: ", err)
+	}
+
+	log.Printf("B2C response %+v \n", b2cRes)
+
 }
 
 // checking account balance for both B2C and C2B short codes -.
@@ -114,7 +122,7 @@ func b2cPayment(darajaService *daraja.DarajaService) (*daraja.B2CResponseBody, e
 		Amount:             1,
 		PartyA:             600998,
 		PartyB:             254728922369,
-		Remarks:            "Payment from VA",
+		Remarks:            "Payment from Business",
 		QueueTimeOutURL:    "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		ResultURL:          "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		Occassion:          "VA Occasion",
@@ -229,7 +237,7 @@ func reverseC2BPayment(darajaService *daraja.DarajaService) (*daraja.Transaction
 		ResultURL:              "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		QueueTimeOutURL:        "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		Remarks:                "REVERSAL REMARK",
-		Occassion:              "REVERSAL OCCASSION",
+		Occassion:              "REVERSAL OCCASION",
 	})
 
 	if err != nil {
