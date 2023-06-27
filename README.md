@@ -1,5 +1,4 @@
-# Daraja Golang SDK 
-
+# Daraja Golang SDK
 The SDK provides fast, secure and easy integration for [Safaricom MPESA Daraja API](https://developer.safaricom.co.ke/apis-explorer) for golang applications.
 
 ## Installing
@@ -26,7 +25,16 @@ const (
 )
 ```
 
-### MPESAExpress/Network Initiated (STKPush)
+Then declare service for either production or sandbox
+```
+darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
+
+	if err != nil {
+		log.Println("failed initializing safaricom daraja client ", err)
+	}
+```
+
+### Network Initiated/Mpesa Express (STKPush)
 This api initiates payment prompt on customer sim tool kit.
 ```go
 package main
@@ -71,7 +79,7 @@ func main() {
 
 ```
 
-### C2B URL register
+### C2B register URL
 Register confirmation and validation urls, however you need to request validation url setup from safaricom daraja.
 
 ```go
@@ -150,7 +158,54 @@ func main() {
 }
 ```
 
-### B2C
+### Transaction Status
+This api allows you to track transaction status for payments.
+
+```go
+package main
+
+import (
+	"log"
+	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
+)
+
+const (
+	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
+	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
+	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+)
+
+func main() {
+
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
+
+	if err != nil {
+		log.Println("failed initializing safaricom daraja client ", err)
+	}
+
+	statusResponse, err := darajaService.TransactionStatus(daraja.TransactionStatusRequestBody{
+		Initiator:          "testapi",
+		SecurityCredential: "UKCrm4IVKWEoW640M3pUHS4hZ2ynDpz+LT6c+acBK28TOMULxVhMP0YM2FNCh2QXx+m6HR8iLNsR0bfbIB1kpvNhciKUrn7Glp4f7UNPF8mHXgNsa/09+i7X8+JUy7tQLEOoPE/xCWBOh2ofBq8N+lX77RUAxDp9HC8Nj6nN6kH07Ygmz7NnRd/dlayqcFKV4UNP/nQAV8lum2HSh9xRBnlexcziYipt/d293qrSSvXtAfz+lmgzzbzwML02zlCQxXS2YQjTluQWzRgxkl+9aCCs51a5BWppTE6iYd8qcMlX/+hMZvl2D9LjQKwisSKJsWP2MtxFxG86DRpwI41I4A==",
+		CommandID:          "TransactionStatusQuery",
+		TransactionID:      "RFL5LEUJ4H",
+		PartyA:             600989,
+		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
+		IdentifierType:  2,
+		ResultURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
+		QueueTimeOutURL: "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
+		Remarks:         "TRANSACTION STATUS REMARKS",
+		Occassion:       "TRANSACTION STATUS  OCCASION",
+	})
+
+	if err != nil {
+		log.Println("Status error: ", err)
+	}
+	log.Printf("Status response %+v \n", statusResponse)
+
+}
+```
+
+### B2C payment
 This api allows you to do M-Pesa Transaction from company to client.
 
 ```go
@@ -158,87 +213,41 @@ package main
 
 import (
 	"log"
-	"github.com/AndroidStudyOpenSource/mpesa-api-go"
+	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 )
 
 const (
-	appKey    = ""
-	appSecret = ""
+	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
+	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
+	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
 )
 
 func main() {
 
-	svc, err := mpesa.New(appKey, appSecret, mpesa.SANDBOX)
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
+
 	if err != nil {
-		panic(err)
+		log.Println("failed initializing safaricom daraja client ", err)
 	}
 
-	res, err := svc.B2CRequest(mpesa.B2C{
-		InitiatorName:      "",
-		SecurityCredential: "",
-		CommandID:          "",
-		Amount:             "",
-		PartyA:             "",
-		PartyB:             "",
-		Remarks:            "",
-		QueueTimeOutURL:    "",
-		ResultURL:          "",
-		Occassion:          "",
+	b2cResponse, err := darajaService.B2CPayment(daraja.B2CRequestBody{
+		InitiatorName:      "testapi",
+		SecurityCredential: "UKCrm4IVKWEoW640M3pUHS4hZ2ynDpz+LT6c+acBK28TOMULxVhMP0YM2FNCh2QXx+m6HR8iLNsR0bfbIB1kpvNhciKUrn7Glp4f7UNPF8mHXgNsa/09+i7X8+JUy7tQLEOoPE/xCWBOh2ofBq8N+lX77RUAxDp9HC8Nj6nN6kH07Ygmz7NnRd/dlayqcFKV4UNP/nQAV8lum2HSh9xRBnlexcziYipt/d293qrSSvXtAfz+lmgzzbzwML02zlCQxXS2YQjTluQWzRgxkl+9aCCs51a5BWppTE6iYd8qcMlX/+hMZvl2D9LjQKwisSKJsWP2MtxFxG86DRpwI41I4A==",
+		CommandID:          "SalaryPayment",
+		Amount:             1,
+		PartyA:             600998,
+		PartyB:             254728920369,
+		Remarks:            "Payment from Business",
+		QueueTimeOutURL:    "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		ResultURL:          "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		Occassion:          "VA Occasion",
 	})
 
 	if err != nil {
-		log.Println(err)
+		log.Println("B2C error: ", err)
 	}
-	log.Println(res)
-
+	log.Printf("B2C response %+v \n", b2cResponse)
 }
-```
-
-### B2B
-This api allows you to do M-Pesa Transaction from one company to another.
-
-```go
-package main
-
-import (
-	"log"
-	"github.com/AndroidStudyOpenSource/mpesa-api-go"
-)
-
-const (
-	appKey    = ""
-	appSecret = ""
-)
-
-func main() {
-
-	svc, err := mpesa.New(appKey, appSecret, mpesa.SANDBOX)
-	if err != nil {
-		panic(err)
-	}
-
-	res, err := svc.B2BRequest(mpesa.B2B{
-		Initiator:              "",
-		SecurityCredential:     "",
-		CommandID:              "",
-		SenderIdentifierType:   "",
-		RecieverIdentifierType: "",
-		Remarks:                "",
-		Amount:                 "",
-		PartyA:                 "",
-		PartyB:                 "",
-		AccountReference:       "",
-		QueueTimeOutURL:        "",
-		ResultURL:              "",
-	})
-
-	if err != nil {
-		log.Println(err)
-	}
-	log.Println(res)
-
-}
-
 ```
 
 ### Account Balance
@@ -249,85 +258,88 @@ package main
 
 import (
 	"log"
-	"github.com/AndroidStudyOpenSource/mpesa-api-go"
+	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 )
 
 const (
-	appKey    = ""
-	appSecret = ""
+	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
+	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
+	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
 )
 
 func main() {
 
-	svc, err := mpesa.New(appKey, appSecret, mpesa.SANDBOX)
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
+
 	if err != nil {
-		panic(err)
+		log.Println("failed initializing safaricom daraja client ", err)
 	}
 
-	res, err := svc.BalanceInquiry(mpesa.BalanceInquiry{
-		Initiator:          "",
-		SecurityCredential: "",
-		CommandID:          "",
-		PartyA:             "",
-		IdentifierType:     "",
-		Remarks:            "",
-		QueueTimeOutURL:    "",
-		ResultURL:          "",
+	balanceResponse, err := darajaService.QueryAccountBalance(daraja.AccountBalanceRequestBody{
+		Initiator:          "testapi",
+		SecurityCredential: "UKCrm4IVKWEoW640M3pUHS4hZ2ynDpz+LT6c+acBK28TOMULxVhMP0YM2FNCh2QXx+m6HR8iLNsR0bfbIB1kpvNhciKUrn7Glp4f7UNPF8mHXgNsa/09+i7X8+JUy7tQLEOoPE/xCWBOh2ofBq8N+lX77RUAxDp9HC8Nj6nN6kH07Ygmz7NnRd/dlayqcFKV4UNP/nQAV8lum2HSh9xRBnlexcziYipt/d293qrSSvXtAfz+lmgzzbzwML02zlCQxXS2YQjTluQWzRgxkl+9aCCs51a5BWppTE6iYd8qcMlX/+hMZvl2D9LjQKwisSKJsWP2MtxFxG86DRpwI41I4A==",
+		CommandID:          "AccountBalance",
+		PartyA:             600991,
+		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
+		IdentifierType:  2,
+		Remarks:         "Churpy Balance",
+		QueueTimeOutURL: "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
+		ResultURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 	})
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Balance error : ", err)
 	}
-	log.Println(res)
+	
+	log.Printf("Balance response %+v \n", balanceResponse)
 
 }
 ```
 
-### Transaction Status
-This api allows you to check the status of transaction.
 
 ### Reversal
-This api allows you to do a transaction reversal
+This api allows you to do a transaction reversal for C2B payment
 
 ```go
 package main
 
 import (
 	"log"
-	"github.com/AndroidStudyOpenSource/mpesa-api-go"
+	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 )
 
 const (
-	appKey    = ""
-	appSecret = ""
+	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
+	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
+	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
 )
 
 func main() {
 
-	svc, err := mpesa.New(appKey, appSecret, mpesa.SANDBOX)
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
+
 	if err != nil {
-		panic(err)
+		log.Println("failed initializing safaricom daraja client ", err)
 	}
 
-	res, err := svc.Reversal(mpesa.Reversal{
-		Initiator:              "",
-		SecurityCredential:     "",
-		CommandID:              "",
-		TransactionID:          "",
-		Amount:                 "",
-		ReceiverParty:          "",
-		ReceiverIdentifierType: "",
-		QueueTimeOutURL:        "",
-		ResultURL:              "",
-		Remarks:                "",
-		Occassion:              "",
+	reversalResponse, err := darajaService.C2BTransactionReversal(daraja.TransactionReversalRequestBody{
+		Initiator:              "testapi",
+		SecurityCredential:     "oDx3GjKUpc3LJyPMdjiy2Qy64b+Smfyc8xyPTjYQfpGhVngg8OATaXYla0YazHGtM8rqqlRwGiW30NDTezm81YBpEwCvIWTaR1YN3RmiPPvN+kF03BgX8eCJXVzV/99758nSsEKmleudOMmkegHaTrMOlfjQlcVSiS94u2ZvJejS0X5xpp2dPkplITmpLBh/EpMsB0fJLh7fcrtc8v0V/NJG6Zd6W3d2uB3S6zfJPbc4Iby52iYhAWwFOAbJhrTMVDHKLLCzFXZUZufPpntWcElNAtgEb7AA1Os2FbNyJcrCwT22ATQaU/VMJTjMgMB3Cgdw7Xyw+gMilJ+er/kJzA==",
+		CommandID:              "TransactionReversal",
+		TransactionID:          "OEI2AK4Q16",
+		Amount:                 1,
+		ReceiverParty:          600978,
+		ReceiverIdentifierType: 11,
+		ResultURL:              "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		QueueTimeOutURL:        "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		Remarks:                "REVERSAL REMARK",
+		Occassion:              "REVERSAL OCCASION",
 	})
 
 	if err != nil {
-		log.Println(err)
+		return nil, err
 	}
-	log.Println(res)
-
+    log.Printf("Reversal response %+v \n ", reversalResponse)
 }
 ```
 
