@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-var (
+const (
 	// Set environment variables for daraja before testing. Here I am using sandbox settings-.
 	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
 	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
@@ -229,7 +229,7 @@ func reverseC2BPayment(darajaService *daraja.DarajaService) (*daraja.Transaction
 		ResultURL:              "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		QueueTimeOutURL:        "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		Remarks:                "REVERSAL REMARK",
-		Occassion:              "REVERSAL OCCASSION",
+		Occassion:              "REVERSAL OCCASION",
 	})
 
 	if err != nil {
