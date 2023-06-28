@@ -32,13 +32,13 @@ func main() {
 
 	log.Println("Daraja Token ", token)
 
-	//// Implements stk push service -.
-	//stkRes, err := initiateStkPush(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error in stk push initiation ", err.Error())
-	//}
-	// log.Printf("STKPUSH response is %+v \n", stkRes)
+	// Implements stk push service -.
+	stkRes, err := initiateStkPush(darajaService)
+
+	if err != nil {
+		log.Println("Error in stk push initiation ", err.Error())
+	}
+	log.Printf("STKPUSH response is %+v \n", stkRes)
 
 	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
 	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
@@ -60,13 +60,14 @@ func main() {
 
 }
 
+// Simulate a c2b payment which normally occur when you do a paybill payment -.
 func simulateC2BPayment(darajaService *daraja.DarajaService) (*daraja.C2BSimulateResponse, error) {
 	simulateResponse, err := darajaService.C2BSimulate(daraja.C2BSimulateRequestBody{
 		ShortCode:     600982,
 		CommandID:     "CustomerPayBillOnline",
 		Amount:        1,
 		Msisdn:        254708374149,
-		BillRefNumber: "VIrtual Account",
+		BillRefNumber: "Unique reference",
 	})
 
 	if err != nil {
@@ -110,6 +111,7 @@ func registerConfirmationUrl(darajaService *daraja.DarajaService) (string, error
 	if err != nil {
 		return "", err
 	}
+
 	return regUrl.ResponseCode, nil
 }
 
