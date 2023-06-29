@@ -17,7 +17,7 @@ Obtain mpesaApiKey, mpesaConsumerSecret, mpesaPassKey from [Safaricom MPESA Dara
 
 ```
 const (
-	// Sandbox or production credentials 
+	// Sandbox or production credentials. Note store sucurely as environment vartiables
 	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
 	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
 	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
