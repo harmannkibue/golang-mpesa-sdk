@@ -37,7 +37,7 @@ func (s DarajaService) C2BSimulate(c2bSimulateBody C2BSimulateRequestBody) (*C2B
 		return nil, err
 	}
 
-	// Unmarshal the response body into the RegisterC2BURLResponse struct
+	// Unmarshal the response body into the C2BSimulateResponse struct
 	var c2bSimulateResponse C2BSimulateResponse
 	err = json.NewDecoder(response.Body).Decode(&c2bSimulateResponse)
 

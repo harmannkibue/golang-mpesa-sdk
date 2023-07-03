@@ -5,9 +5,9 @@ import (
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
 )
 
-// C2BRegisterURL Register C2B url for receiving notifications for all C2B transactions -.
-func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURLBody) (*RegisterC2BURLResponse, error) {
-	body, err := json.Marshal(c2bRegisterURL)
+// TransactionStatus checks the account balance for a given short code -.
+func (s DarajaService) TransactionStatus(statusBody TransactionStatusRequestBody) (*TransactionStatusResponseBody, error) {
+	body, err := json.Marshal(statusBody)
 
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURLBody) (*Regis
 	headers["Authorization"] = "Bearer " + token
 	headers["Cache-Control"] = "no-cache"
 
-	url := s.baseURL() + "mpesa/c2b/v1/registerurl"
+	url := s.baseURL() + "mpesa/transactionstatus/v1/query"
 
 	response, err := s.HttpRequest.PerformPost(httprequest.RequestDataParams{
 		Endpoint: url,
@@ -37,13 +37,13 @@ func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURLBody) (*Regis
 		return nil, err
 	}
 
-	// Unmarshal the response body into the RegisterC2BURLResponse struct
-	var registerResponse RegisterC2BURLResponse
-	err = json.NewDecoder(response.Body).Decode(&registerResponse)
+	// Unmarshal the response body into the TransactionStatusResponseBody struct
+	var statusResponse TransactionStatusResponseBody
+	err = json.NewDecoder(response.Body).Decode(&statusResponse)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &registerResponse, nil
+	return &statusResponse, nil
 }

@@ -5,9 +5,9 @@ import (
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
 )
 
-// C2BRegisterURL Register C2B url for receiving notifications for all C2B transactions -.
-func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURLBody) (*RegisterC2BURLResponse, error) {
-	body, err := json.Marshal(c2bRegisterURL)
+// QueryAccountBalance checks account balance for both the B2C and C2B short codes -.
+func (s DarajaService) QueryAccountBalance(accountBalance AccountBalanceRequestBody) (*AccountBalanceResponseBody, error) {
+	body, err := json.Marshal(accountBalance)
 
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURLBody) (*Regis
 	headers["Authorization"] = "Bearer " + token
 	headers["Cache-Control"] = "no-cache"
 
-	url := s.baseURL() + "mpesa/c2b/v1/registerurl"
+	url := s.baseURL() + "mpesa/accountbalance/v1/query"
 
 	response, err := s.HttpRequest.PerformPost(httprequest.RequestDataParams{
 		Endpoint: url,
@@ -38,12 +38,12 @@ func (s DarajaService) C2BRegisterURL(c2bRegisterURL RegisterC2BURLBody) (*Regis
 	}
 
 	// Unmarshal the response body into the RegisterC2BURLResponse struct
-	var registerResponse RegisterC2BURLResponse
-	err = json.NewDecoder(response.Body).Decode(&registerResponse)
+	var balanceResponse AccountBalanceResponseBody
+	err = json.NewDecoder(response.Body).Decode(&balanceResponse)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &registerResponse, nil
+	return &balanceResponse, nil
 }
