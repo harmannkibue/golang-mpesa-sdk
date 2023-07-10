@@ -22,41 +22,41 @@ func main() {
 		log.Println("failed initializing safaricom daraja client ", err)
 	}
 
-	// Implements getting token from daraja, if not available in the memory cache -.
-	token, err := darajaToken(darajaService)
-
-	if err != nil {
-		log.Println("Error fetching token ", err.Error())
-	}
-
-	log.Println("Daraja Token ", token)
-
-	// Implements stk push service -.
-	stkRes, err := initiateStkPush(darajaService)
-
-	if err != nil {
-		log.Println("Error in stk push initiation ", err.Error())
-	}
-	log.Printf("STKPUSH response is %+v \n", stkRes)
-
-	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
-	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
-
-	if err != nil {
-		log.Println("Error registering a URL ", err.Error())
-	}
-
-	log.Println("Register URL response code ", confirmationResponseCode)
-
-	// Simulate C2B transaction -.
-	simulateResponse, err := simulateC2BPayment(darajaService)
-
-	if err != nil {
-		log.Println("Error simulating C2B request: ", err.Error())
-	}
-
-	fmt.Printf("C2B Response: %+v \n ", simulateResponse)
-
+	//// Implements getting token from daraja, if not available in the memory cache -.
+	//token, err := darajaToken(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error fetching token ", err.Error())
+	//}
+	//
+	//log.Println("Daraja Token ", token)
+	//
+	//// Implements stk push service -.
+	//stkRes, err := initiateStkPush(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error in stk push initiation ", err.Error())
+	//}
+	//log.Printf("STKPUSH response is %+v \n", stkRes)
+	//
+	//// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	//confirmationResponseCode, err := registerConfirmationUrl(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error registering a URL ", err.Error())
+	//}
+	//
+	//log.Println("Register URL response code ", confirmationResponseCode)
+	//
+	//// Simulate C2B transaction -.
+	//simulateResponse, err := simulateC2BPayment(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error simulating C2B request: ", err.Error())
+	//}
+	//
+	//fmt.Printf("C2B Response: %+v \n ", simulateResponse)
+	//
 	balance, err := accountBalance(darajaService)
 
 	if err != nil {
@@ -65,21 +65,21 @@ func main() {
 
 	fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
 
-	status, err := queryTransactionStatus(darajaService)
-
-	if err != nil {
-		log.Println("TRANSACTION STATUS RESPONSE ", err.Error())
-	}
-
-	log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
-
-	reversal, err := reverseC2BPayment(darajaService)
-
-	if err != nil {
-		log.Println("C2B REVERSAL ERROR ", err.Error())
-	}
-
-	log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
+	//status, err := queryTransactionStatus(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("TRANSACTION STATUS RESPONSE ", err.Error())
+	//}
+	//
+	//log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
+	//
+	//reversal, err := reverseC2BPayment(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("C2B REVERSAL ERROR ", err.Error())
+	//}
+	//
+	//log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
 
 	b2cRes, err := b2cPayment(darajaService)
 
@@ -96,7 +96,7 @@ func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalance
 
 	balance, err := darajaService.QueryAccountBalance(daraja.AccountBalanceRequestBody{
 		Initiator:          "testapi",
-		SecurityCredential: "UKCrm4IVKWEoW640M3pUHS4hZ2ynDpz+LT6c+acBK28TOMULxVhMP0YM2FNCh2QXx+m6HR8iLNsR0bfbIB1kpvNhciKUrn7Glp4f7UNPF8mHXgNsa/09+i7X8+JUy7tQLEOoPE/xCWBOh2ofBq8N+lX77RUAxDp9HC8Nj6nN6kH07Ygmz7NnRd/dlayqcFKV4UNP/nQAV8lum2HSh9xRBnlexcziYipt/d293qrSSvXtAfz+lmgzzbzwML02zlCQxXS2YQjTluQWzRgxkl+9aCCs51a5BWppTE6iYd8qcMlX/+hMZvl2D9LjQKwisSKJsWP2MtxFxG86DRpwI41I4A==",
+		SecurityCredential: "TO1YWO5VWQUeTwvkfamfDipyG3qv3vJXOc5RtLAEBGeF21ocXI2jNff2aoEd6ZCxHegpBKC/vUbZ58ZcweY1Ty3vuwTHPNdbLLJaescx0c//ozRfNK+mInnsAHCAmrSOB0M8QxFh2GNPpKSHtO7jz0qlbqYwzNxMmOG5SkPQUmaR3EYcHM4nG92UprKUqP4DC4oJRFDvGZBO/Ad2KHTmpGjclFx+37gA83tBF4xxOIx9RhXTpbo5Vlgmcrjf9sXtbYZyjH7KjTEjpAcGoy46i4iLoOHD6m46D1Fhb9SHcE2ExWUtjCMm3E+eP7XdoxEB9Xturoyz00poqzRwpEZl2Q==",
 		CommandID:          "AccountBalance",
 		PartyA:             600991,
 		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
@@ -117,15 +117,15 @@ func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalance
 func b2cPayment(darajaService *daraja.DarajaService) (*daraja.B2CResponseBody, error) {
 	b2cPayment, err := darajaService.B2CPayment(daraja.B2CRequestBody{
 		InitiatorName:      "testapi",
-		SecurityCredential: "UKCrm4IVKWEoW640M3pUHS4hZ2ynDpz+LT6c+acBK28TOMULxVhMP0YM2FNCh2QXx+m6HR8iLNsR0bfbIB1kpvNhciKUrn7Glp4f7UNPF8mHXgNsa/09+i7X8+JUy7tQLEOoPE/xCWBOh2ofBq8N+lX77RUAxDp9HC8Nj6nN6kH07Ygmz7NnRd/dlayqcFKV4UNP/nQAV8lum2HSh9xRBnlexcziYipt/d293qrSSvXtAfz+lmgzzbzwML02zlCQxXS2YQjTluQWzRgxkl+9aCCs51a5BWppTE6iYd8qcMlX/+hMZvl2D9LjQKwisSKJsWP2MtxFxG86DRpwI41I4A==",
+		SecurityCredential: "JEy9Ivcgj+XdF4IHc7ILATY8nlthO0VrFPM8LOlBbvWbOAbwrGyemGebzEKMS/HSPWS9mO7zbEPBV5NrknHK2KGEAsprilMJE4CethZ5YSPsj33SjFQV7W/0YJNavs9Jpqv1mjoaGh89JodgutEmLjZ+3vsKfped55ia7l/Oxoz0eesGfE4DpQvDxjyqzBOsnsAWOPwjSOFIaYeH0ANrfNaJr6FZ1YkJiyV/9qM+8s/iArPDTDzsysfZNvYTlyPo1SPEc6e7dTq761v4BA0sgdPud9N8coizajusJmuawap2q5GmRXXndIwXfJiZpNFIsbu1SOdj47Bu4z9rBDC5cA==",
 		CommandID:          "SalaryPayment",
 		Amount:             1,
 		PartyA:             600998,
-		PartyB:             254728922369,
+		PartyB:             254728922269,
 		Remarks:            "Payment from Business",
-		QueueTimeOutURL:    "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
-		ResultURL:          "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
-		Occassion:          "VA Occasion",
+		QueueTimeOutURL:    "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
+		ResultURL:          "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
+		Occassion:          "Occasion",
 	})
 
 	if err != nil {

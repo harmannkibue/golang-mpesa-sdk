@@ -148,7 +148,7 @@ func main() {
 		CommandID:     "CustomerPayBillOnline",
 		Amount:        1,
 		Msisdn:        254708374149,
-		BillRefNumber: "VIrtual Account",
+		BillRefNumber: "Account number",
 	})
 
 	if err != nil {
@@ -240,7 +240,7 @@ func main() {
 		Remarks:            "Payment from Business",
 		QueueTimeOutURL:    "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		ResultURL:          "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
-		Occassion:          "VA Occasion",
+		Occassion:          "Occasion",
 	})
 
 	if err != nil {
