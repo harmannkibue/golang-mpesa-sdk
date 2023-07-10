@@ -8,9 +8,11 @@ import (
 
 const (
 	// Set environment variables for daraja before testing. Here I am using sandbox settings-.
-	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
-	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
+	mpesaApiKey         = "apiKeyValue"
+	mpesaConsumerSecret = "apiSecretValue"
+
 	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+	
 )
 
 func main() {
@@ -22,41 +24,41 @@ func main() {
 		log.Println("failed initializing safaricom daraja client ", err)
 	}
 
-	//// Implements getting token from daraja, if not available in the memory cache -.
-	//token, err := darajaToken(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error fetching token ", err.Error())
-	//}
-	//
-	//log.Println("Daraja Token ", token)
-	//
-	//// Implements stk push service -.
-	//stkRes, err := initiateStkPush(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error in stk push initiation ", err.Error())
-	//}
-	//log.Printf("STKPUSH response is %+v \n", stkRes)
-	//
-	//// Implements registering a confirmation and validation url.If response code is zero then it passed -.
-	//confirmationResponseCode, err := registerConfirmationUrl(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error registering a URL ", err.Error())
-	//}
-	//
-	//log.Println("Register URL response code ", confirmationResponseCode)
-	//
-	//// Simulate C2B transaction -.
-	//simulateResponse, err := simulateC2BPayment(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error simulating C2B request: ", err.Error())
-	//}
-	//
-	//fmt.Printf("C2B Response: %+v \n ", simulateResponse)
-	//
+	// Implements getting token from daraja, if not available in the memory cache -.
+	token, err := darajaToken(darajaService)
+
+	if err != nil {
+		log.Println("Error fetching token ", err.Error())
+	}
+
+	log.Println("Daraja Token ", token)
+
+	// Implements stk push service -.
+	stkRes, err := initiateStkPush(darajaService)
+
+	if err != nil {
+		log.Println("Error in stk push initiation ", err.Error())
+	}
+	log.Printf("STKPUSH response is %+v \n", stkRes)
+
+	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
+
+	if err != nil {
+		log.Println("Error registering a URL ", err.Error())
+	}
+
+	log.Println("Register URL response code ", confirmationResponseCode)
+
+	// Simulate C2B transaction -.
+	simulateResponse, err := simulateC2BPayment(darajaService)
+
+	if err != nil {
+		log.Println("Error simulating C2B request: ", err.Error())
+	}
+
+	fmt.Printf("C2B Response: %+v \n ", simulateResponse)
+
 	balance, err := accountBalance(darajaService)
 
 	if err != nil {
@@ -65,21 +67,21 @@ func main() {
 
 	fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
 
-	//status, err := queryTransactionStatus(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("TRANSACTION STATUS RESPONSE ", err.Error())
-	//}
-	//
-	//log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
-	//
-	//reversal, err := reverseC2BPayment(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("C2B REVERSAL ERROR ", err.Error())
-	//}
-	//
-	//log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
+	status, err := queryTransactionStatus(darajaService)
+
+	if err != nil {
+		log.Println("TRANSACTION STATUS RESPONSE ", err.Error())
+	}
+
+	log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
+
+	reversal, err := reverseC2BPayment(darajaService)
+
+	if err != nil {
+		log.Println("C2B REVERSAL ERROR ", err.Error())
+	}
+
+	log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
 
 	b2cRes, err := b2cPayment(darajaService)
 
