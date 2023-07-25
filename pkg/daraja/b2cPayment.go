@@ -39,7 +39,7 @@ func (s DarajaService) B2CPayment(b2cBody B2CRequestBody) (*B2CResponseBody, err
 		return nil, err
 	}
 
-	// Unmarshal the response body into the B2CResponseBody struct
+	// Unmarshal the response body into the B2CResponseBody struct -.
 	var b2cResponse B2CResponseBody
 	err = json.NewDecoder(response.Body).Decode(&b2cResponse)
 
