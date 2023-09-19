@@ -1,14 +1,23 @@
 package daraja
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/internal/utils/httprequest"
 )
 
 // MpesaExpressTransactionStatus Transaction status query api -.
-func (s DarajaService) MpesaExpressTransactionStatus(statusBody MpesaExpressTransactionStatusQueryBody) (*MpesaExpressTransactionStatusQueryResponse, error) {
-	body, err := json.Marshal(statusBody)
+func (s DarajaService) MpesaExpressTransactionStatus(statusBody MpesaExpressTransactionStatusQueryBodyComplete) (*MpesaExpressTransactionStatusQueryResponse, error) {
+	encodingPasswordData := fmt.Sprintf("%s%s%s", statusBody.BusinessShortCode, statusBody.Password, statusBody.Timestamp)
+
+	password := base64.StdEncoding.EncodeToString([]byte(encodingPasswordData))
+
+	fmt.Println("THE PASSWORD ENCODED ISS ", encodingPasswordData)
+
+	data := MpesaExpressTransactionStatusQueryBodyComplete{BusinessShortCode: statusBody.BusinessShortCode, Password: password, Timestamp: statusBody.Timestamp, CheckoutRequestID: statusBody.CheckoutRequestID}
+
+	body, err := json.Marshal(data)
 
 	if err != nil {
 		return nil, err

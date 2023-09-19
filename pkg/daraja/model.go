@@ -101,6 +101,12 @@ type AccountBalanceResponseBody struct {
 // MpesaExpressTransactionStatusQueryBody the payload for checking mpesa express transaction status -.
 type MpesaExpressTransactionStatusQueryBody struct {
 	BusinessShortCode string `json:"BusinessShortCode"`
+	Timestamp         string `json:"Timestamp"`
+	CheckoutRequestID string `json:"CheckoutRequestID"`
+}
+
+type MpesaExpressTransactionStatusQueryBodyComplete struct {
+	BusinessShortCode string `json:"BusinessShortCode"`
 	Password          string `json:"Password"`
 	Timestamp         string `json:"Timestamp"`
 	CheckoutRequestID string `json:"CheckoutRequestID"`

@@ -7,13 +7,9 @@ import (
 
 const (
 	// Set environment variables for daraja before testing. Here I am using sandbox settings-.
-	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+	mpesaPassKey        = "0f2f587066b975699eac311b466c3cab733b4e73d9d20cacfde56be48d24bc6a"
 	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
 	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
-	// For B2C
-	//mpesaPassKey        = "0f2f587066b975699eac311b466c3cab733b4e73d9d20cacfde56be48d24bc6a"
-	//mpesaApiKey         = "AqHNymMXPgWmARh2liokMJpX8whZ29Q0"
-	//mpesaConsumerSecret = "PoiaTiXvHSE561aW"
 )
 
 func main() {
@@ -26,13 +22,13 @@ func main() {
 	}
 
 	// Implements getting token from daraja, if not available in the memory cache -.
-	token, err := darajaToken(darajaService)
-
-	if err != nil {
-		log.Println("Error fetching token ", err.Error())
-	}
-
-	log.Println("Daraja Token ", token)
+	//token, err := darajaToken(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error fetching token ", err.Error())
+	//}
+	//
+	//log.Println("Daraja Token ", token)
 
 	// Implements stk push service -.
 	//stkRes, err := initiateStkPush(darajaService)
@@ -214,11 +210,11 @@ func darajaToken(darajaService *daraja.DarajaService) (string, error) {
 }
 
 func queryMpesaExpressTransactionStatus(darajaService *daraja.DarajaService) (*daraja.MpesaExpressTransactionStatusQueryResponse, error) {
-	status, err := darajaService.MpesaExpressTransactionStatus(daraja.MpesaExpressTransactionStatusQueryBody{
+	status, err := darajaService.MpesaExpressTransactionStatus(daraja.MpesaExpressTransactionStatusQueryBodyComplete{
 		BusinessShortCode: "7675771",
-		Password:          "IKq/h55FfD0SY65MKy7v551T0bCDSkn7Zwya8B1m8rOB7Ub5HNrc5w6s+meEpjtZvzSMLNADL5j2Uuf4ud6R/IS+Dgh0e60tpJqob9Rx1F9t8RJQyVh/AD3mv2xqVO3d52Ue4L+h1vudha2PhHI6FpO7w7klmd+vF6Rd3sTP/1bxpod4ub/fh7YleDgyV6+qai4K6QDSv3VsAi+HL4onC4N0D5g0F9Il3yor+zZRq2fmrvoXz8jjtVSmS9CDOu74gwcxqtMS/d463Dg/kwrF8fqr1rdepUIM0RVt1sJ1Pds9zIoZj37luHhjlTIU8/AgPzWRH6NHRC5KGwejOu1ZeA==",
+		Password:          darajaService.ApiPassKey,
 		Timestamp:         "20230619204330",
-		CheckoutRequestID: "ws_CO_19062023234330498728922269",
+		CheckoutRequestID: "ws_CO_19092023131241018728922269",
 	})
 
 	if err != nil {
