@@ -37,7 +37,7 @@ func (s DarajaService) QueryAccountBalance(accountBalance AccountBalanceRequestB
 		return nil, err
 	}
 
-	// Unmarshal the response body into the RegisterC2BURLResponse struct
+	// Unmarshal the response body into the RegisterC2BURLResponse struct -.
 	var balanceResponse AccountBalanceResponseBody
 	err = json.NewDecoder(response.Body).Decode(&balanceResponse)
 
