@@ -98,18 +98,43 @@ type AccountBalanceResponseBody struct {
 	ResponseDescription      string `json:"ResponseDescription"`
 }
 
+// MpesaExpressTransactionStatusQueryBody the payload for checking mpesa express transaction status -.
+type MpesaExpressTransactionStatusQueryBody struct {
+	BusinessShortCode string `json:"BusinessShortCode"`
+	Timestamp         string `json:"Timestamp"`
+	CheckoutRequestID string `json:"CheckoutRequestID"`
+}
+
+type MpesaExpressTransactionStatusQueryBodyComplete struct {
+	BusinessShortCode string `json:"BusinessShortCode"`
+	Password          string `json:"Password"`
+	Timestamp         string `json:"Timestamp"`
+	CheckoutRequestID string `json:"CheckoutRequestID"`
+}
+
+// MpesaExpressTransactionStatusQueryResponse response from acknowledging mpesa express transaction status -.
+type MpesaExpressTransactionStatusQueryResponse struct {
+	ResponseCode        string `json:"ResponseCode"`
+	ResponseDescription string `json:"ResponseDescription"`
+	MerchantRequestID   string `json:"MerchantRequestID"`
+	CheckoutRequestID   string `json:"CheckoutRequestID"`
+	ResultCode          string `json:"ResultCode"`
+	ResultDesc          string `json:"ResultDesc"`
+}
+
 // TransactionStatusRequestBody  checking the status of a transaction based of the M-Pesa receipt number -.
 type TransactionStatusRequestBody struct {
-	Initiator          string `json:"Initiator"`
-	SecurityCredential string `json:"SecurityCredential"`
-	CommandID          string `json:"CommandID"`
-	TransactionID      string `json:"TransactionID"`
-	PartyA             int    `json:"PartyA"`
-	IdentifierType     int    `json:"IdentifierType"`
-	ResultURL          string `json:"ResultURL"`
-	QueueTimeOutURL    string `json:"QueueTimeOutURL"`
-	Remarks            string `json:"Remarks"`
-	Occassion          string `json:"Occassion"`
+	Initiator                string `json:"Initiator"`
+	SecurityCredential       string `json:"SecurityCredential"`
+	CommandID                string `json:"CommandID"`
+	TransactionID            string `json:"TransactionID"`
+	OriginatorConversationID string `json:"OriginatorConversationID"`
+	PartyA                   int    `json:"PartyA"`
+	IdentifierType           int    `json:"IdentifierType"`
+	ResultURL                string `json:"ResultURL"`
+	QueueTimeOutURL          string `json:"QueueTimeOutURL"`
+	Remarks                  string `json:"Remarks"`
+	Occassion                string `json:"Occassion"`
 }
 
 // TransactionStatusResponseBody response for initiating transaction status check -.

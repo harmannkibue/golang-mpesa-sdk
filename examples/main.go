@@ -8,21 +8,21 @@ import (
 
 const (
 	// Set environment variables for daraja before testing. Here I am using sandbox settings-.
+	mpesaPassKey        = "passKeyValue"
 	mpesaApiKey         = "apiKeyValue"
-	mpesaConsumerSecret = "apiSecretValue"
-	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+	mpesaConsumerSecret = "consumerSecretValue"
 )
 
 func main() {
 	// Initialize daraja service. PassKey is provided on your portal for sandbox,
 	// while it is shared on your go live email from apisupport@safaricom.co.ke
-	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.PRODUCTION)
 
 	if err != nil {
 		log.Println("failed initializing safaricom daraja client ", err)
 	}
 
-	// Implements getting token from daraja, if not available in the memory cache -.
+	//Implements getting token from daraja, if not available in the memory cache -.
 	token, err := darajaToken(darajaService)
 
 	if err != nil {
@@ -31,7 +31,7 @@ func main() {
 
 	log.Println("Daraja Token ", token)
 
-	// Implements stk push service -.
+	//Implements stk push service -.
 	stkRes, err := initiateStkPush(darajaService)
 
 	if err != nil {
@@ -65,13 +65,21 @@ func main() {
 
 	fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
 
-	status, err := queryTransactionStatus(darajaService)
+	mpesaExpressStatus, err := queryMpesaExpressTransactionStatus(darajaService)
 
 	if err != nil {
-		log.Println("TRANSACTION STATUS RESPONSE ", err.Error())
+		log.Println("MPESA EXPRESS TRANSACTION STATUS RESPONSE ", err.Error())
 	}
 
-	log.Printf("TRANSACTION STATUS RESPONSE %+v \n", status)
+	log.Printf("MPESA EXPRESS TRANSACTION STATUS RESPONSE %+v \n", mpesaExpressStatus)
+
+	b2CStatus, err := queryTransactionStatus(darajaService)
+
+	if err != nil {
+		log.Println("B2C TRANSACTION STATUS RESPONSE ", err.Error())
+	}
+
+	log.Printf("B2C TRANSACTION STATUS RESPONSE %+v \n", b2CStatus)
 
 	reversal, err := reverseC2BPayment(darajaService)
 
@@ -95,13 +103,13 @@ func main() {
 func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalanceResponseBody, error) {
 
 	balance, err := darajaService.QueryAccountBalance(daraja.AccountBalanceRequestBody{
-		Initiator:          "testapi",
-		SecurityCredential: "TO1YWO5VWQUeTwvkfamfDipyG3qv3vJXOc5RtLAEBGeF21ocXI2jNff2aoEd6ZCxHegpBKC/vUbZ58ZcweY1Ty3vuwTHPNdbLLJaescx0c//ozRfNK+mInnsAHCAmrSOB0M8QxFh2GNPpKSHtO7jz0qlbqYwzNxMmOG5SkPQUmaR3EYcHM4nG92UprKUqP4DC4oJRFDvGZBO/Ad2KHTmpGjclFx+37gA83tBF4xxOIx9RhXTpbo5Vlgmcrjf9sXtbYZyjH7KjTEjpAcGoy46i4iLoOHD6m46D1Fhb9SHcE2ExWUtjCMm3E+eP7XdoxEB9Xturoyz00poqzRwpEZl2Q==",
+		Initiator:          "tester",
+		SecurityCredential: "En82XvcYCITgT+RheQJYw2x1ICJviJhtjNM9no2eipC7Tag8C6fUUf+hgfzlmglMmH9m7z4LaLRwIo/eAq+vHos8DC9bEPQvi2avnG2k8VsCb5R2PaQU//OTqSjfxrsRZrRdhHBjLrG8shlN+No4UhQAvBAvQl/22tUMfJjPG2SmbFcA+6o/Yr8XWV9+TRH8zimhyh86ibhERSVHst6kFYeoY7B+QIoDPvLZ2BKDyU7WP8g85HalM1slOttA==",
 		CommandID:          "AccountBalance",
-		PartyA:             600991,
+		PartyA:             30777761,
 		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
-		IdentifierType:  2,
-		Remarks:         "Churpy Balance",
+		IdentifierType:  4,
+		Remarks:         "Balance",
 		QueueTimeOutURL: "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 		ResultURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 	})
@@ -116,16 +124,17 @@ func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalance
 // Implements business to customer payment -.
 func b2cPayment(darajaService *daraja.DarajaService) (*daraja.B2CResponseBody, error) {
 	b2cPayment, err := darajaService.B2CPayment(daraja.B2CRequestBody{
-		InitiatorName:      "testapi",
-		SecurityCredential: "JEy9Ivcgj+XdF4IHc7ILATY8nlthO0VrFPM8LOlBbvWbOAbwrGyemGebzEKMS/HSPWS9mO7zbEPBV5NrknHK2KGEAsprilMJE4CethZ5YSPsj33SjFQV7W/0YJNavs9Jpqv1mjoaGh89JodgutEmLjZ+3vsKfped55ia7l/Oxoz0eesGfE4DpQvDxjyqzBOsnsAWOPwjSOFIaYeH0ANrfNaJr6FZ1YkJiyV/9qM+8s/iArPDTDzsysfZNvYTlyPo1SPEc6e7dTq761v4BA0sgdPud9N8coizajusJmuawap2q5GmRXXndIwXfJiZpNFIsbu1SOdj47Bu4z9rBDC5cA==",
+		InitiatorName:      "testing",
+		SecurityCredential: "g8C6fap7TjemT1FjPHzsgPWc3zWigBYcxijTJfVq9liUUf+hgfzlmglMmH9m7z4LaLRwIo/eAq+vHos8DC9bEPQvi2avnG2k8VsCb5R2PaQU//OTqSjfxrsRZrRdhHBjLrG8shlN+No4UhQAvBAvQl/22tUMfJjPG2SmbFcA+6o/Yr8XWV9+TRH8zimhyh86ibhERSVHst6kFYeoY7B+QIoDPvLZ2BKDyU7WP8g85HalM1slOttA==",
 		CommandID:          "SalaryPayment",
-		Amount:             1,
-		PartyA:             600998,
+		Amount:             10,
+		PartyA:             31111,
 		PartyB:             254728922269,
 		Remarks:            "Payment from Business",
 		QueueTimeOutURL:    "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
-		ResultURL:          "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
-		Occassion:          "Occasion",
+		//QueueTimeOutURL: "https://staging.virtualaccounts.agoodjoke.lol/va-core/api/v1/payout/daraja-b2c-callback/",
+		ResultURL: "https://staging.virtualaccounts.agoodjoke.lol/va-core/api/v1/payout/daraja-b2c-callback/",
+		Occassion: "Occasion",
 	})
 
 	if err != nil {
@@ -156,13 +165,13 @@ func simulateC2BPayment(darajaService *daraja.DarajaService) (*daraja.C2BSimulat
 func initiateStkPush(darajaService *daraja.DarajaService) (*daraja.StkPushResponse, error) {
 	// "CustomerPayBillOnline" for PayBill Numbers and "CustomerBuyGoodsOnline" for Till Numbers.
 	stkRes, err := darajaService.InitiateStkPush(daraja.STKPushBody{
-		BusinessShortCode: "174379",
+		BusinessShortCode: "7675771",
 		TransactionType:   "CustomerBuyGoodsOnline",
 		Amount:            "1",
 		PartyA:            "254728922269",
-		PartyB:            "174379",
+		PartyB:            "5706975",
 		PhoneNumber:       "254728922269",
-		CallBackURL:       "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
+		CallBackURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 		AccountReference:  "999200200",
 		TransactionDesc:   "Daraja sdk testing STK push",
 	})
@@ -201,21 +210,39 @@ func darajaToken(darajaService *daraja.DarajaService) (string, error) {
 	return token, nil
 }
 
-// Query transaction status for a organisation shortcode, MSISDN or a till number
+func queryMpesaExpressTransactionStatus(darajaService *daraja.DarajaService) (*daraja.MpesaExpressTransactionStatusQueryResponse, error) {
+	status, err := darajaService.MpesaExpressTransactionStatus(daraja.MpesaExpressTransactionStatusQueryBodyComplete{
+		BusinessShortCode: "shortcode",
+		Password:          darajaService.ApiPassKey,
+		Timestamp:         "20230619204330",
+		CheckoutRequestID: "ws_CO_19092023131241018728922269",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return status, nil
+
+}
+
+// Query transaction status for a organisation shortcode, MSISDN or a till number -.
 func queryTransactionStatus(darajaService *daraja.DarajaService) (*daraja.TransactionStatusResponseBody, error) {
 
 	status, err := darajaService.TransactionStatus(daraja.TransactionStatusRequestBody{
-		Initiator:          "testapi",
-		SecurityCredential: "UKCrm4IVKWEoW640M3pUHS4hZ2ynDpz+LT6c+acBK28TOMULxVhMP0YM2FNCh2QXx+m6HR8iLNsR0bfbIB1kpvNhciKUrn7Glp4f7UNPF8mHXgNsa/09+i7X8+JUy7tQLEOoPE/xCWBOh2ofBq8N+lX77RUAxDp9HC8Nj6nN6kH07Ygmz7NnRd/dlayqcFKV4UNP/nQAV8lum2HSh9xRBnlexcziYipt/d293qrSSvXtAfz+lmgzzbzwML02zlCQxXS2YQjTluQWzRgxkl+9aCCs51a5BWppTE6iYd8qcMlX/+hMZvl2D9LjQKwisSKJsWP2MtxFxG86DRpwI41I4A==",
-		CommandID:          "TransactionStatusQuery",
-		TransactionID:      "RFL5LEUJ4H",
-		PartyA:             600989,
-		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
-		IdentifierType:  2,
+		// For payout -.
+		Initiator:                "initiatorName",
+		SecurityCredential:       "Um7O7YE3B2l3bKVMvEkdvG0VHBAU7hAO8dRdfhTz/siEwe4LOeYt7pOyvIoMxg",
+		CommandID:                "TransactionStatusQuery",
+		OriginatorConversationID: "26315-110726387-2",
+		TransactionID:            "",
+		PartyA:                   777771,
+		// 1 for MSISDN ,2 FOR TILL NUMBER and 4 FOR ORGANISATION SHORT CODE -.
+		IdentifierType:  4,
 		ResultURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 		QueueTimeOutURL: "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
-		Remarks:         "TRANSACTION STATUS REMARKS",
-		Occassion:       "TRANSACTION STATUS  OCCASION",
+		Remarks:         "OK",
+		Occassion:       "Ok",
 	})
 
 	if err != nil {

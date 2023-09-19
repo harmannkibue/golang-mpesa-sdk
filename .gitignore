@@ -11,7 +11,7 @@
 *.lib
 
 # Go specific
-*initializeCredentials.sh
+.env
 *.prof
 
 # Output of the go coverage tool, specifically when used with LiteIDE

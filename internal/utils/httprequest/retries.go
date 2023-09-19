@@ -39,7 +39,7 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 
 	var resp *http.Response
 
-	// loop number of retries -
+	// loop number of retries -.
 	for i := 1; i <= maxRetries; i++ {
 
 		resp, err = client.Do(req)
@@ -76,6 +76,7 @@ func (h HttpRequest) RetryDo(req *http.Request, maxRetries int, timeout time.Dur
 
 // analyseRespErrors check the response status codes and chose on which to retry with -.
 func (h HttpRequest) analyseRespErrors(req *http.Request, resp *http.Response) (*http.Response, error) {
+
 	var processedResponse *http.Response
 	var err error
 	// The status code is withing the 400-499 range and thus contains error message -.
