@@ -11,6 +11,7 @@ go get github.com/harmannkibue/golang-mpesa-sdk
 ## Technology
 1. Golang v 1.17 or higher
 2. github.com/patrickmn/go-cache - For caching of authentication token
+3. Backoff retry strategy for calling api calls that needs retrys.
 
 ## Getting started
 Obtain mpesaApiKey, mpesaConsumerSecret, mpesaPassKey from [Safaricom MPESA Daraja API](https://developer.safaricom.co.ke/apis-explorer). Also generate credentials either for sandbox or production.
