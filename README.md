@@ -282,7 +282,7 @@ func main() {
 		PartyA:             600991,
 		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
 		IdentifierType:  2,
-		Remarks:         "Churpy Balance",
+		Remarks:         "Balance",
 		QueueTimeOutURL: "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 		ResultURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 	})

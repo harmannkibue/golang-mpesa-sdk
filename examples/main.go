@@ -7,9 +7,9 @@ import (
 
 const (
 	// Set environment variables for daraja before testing. Here I am using sandbox settings-.
-	mpesaPassKey        = "0f2f587066b975699eac311b466c3cab733b4e73d9d20cacfde56be48d24bc6a"
-	mpesaApiKey         = "xzbnAPtuYxchAZ7fEQKLnTpWUQeeADIC"
-	mpesaConsumerSecret = "Sjr7WnjMZvqoo2ta"
+	mpesaPassKey        = ""
+	mpesaApiKey         = ""
+	mpesaConsumerSecret = ""
 )
 
 func main() {
@@ -102,13 +102,13 @@ func main() {
 func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalanceResponseBody, error) {
 
 	balance, err := darajaService.QueryAccountBalance(daraja.AccountBalanceRequestBody{
-		Initiator:          "churpypayapi2",
-		SecurityCredential: "m6FIrs4lHtTi8h+a347/G5/KWTWJObd+SuicTY43tQ+wPcinkuv+En82XvcYCITgT+RheQJYw2x1ICJviJhtjNM9no2eipC7Tag8C6fap7TjemT1FjPHzsgPWc3zWigBYcxijTJfVq9liUUf+hgfzlmglMmH9m7z4LaLRwIo/eAq+vHos8DC9bEPQvi2avnG2k8VsCb5R2PaQU//OTqSjfxrsRZrRdhHBjLrG8shlN+No4UhQAvBAvQl/22tUMfJjPG2SmbFcA+6o/Yr8XWV9+TRH8zimhyh86ibhERSVHst6kFYeoY7B+QIoDPvLZ2BKDyU7WP8g85HalM1slOttA==",
+		Initiator:          "tester",
+		SecurityCredential: "En82XvcYCITgT+RheQJYw2x1ICJviJhtjNM9no2eipC7Tag8C6fUUf+hgfzlmglMmH9m7z4LaLRwIo/eAq+vHos8DC9bEPQvi2avnG2k8VsCb5R2PaQU//OTqSjfxrsRZrRdhHBjLrG8shlN+No4UhQAvBAvQl/22tUMfJjPG2SmbFcA+6o/Yr8XWV9+TRH8zimhyh86ibhERSVHst6kFYeoY7B+QIoDPvLZ2BKDyU7WP8g85HalM1slOttA==",
 		CommandID:          "AccountBalance",
 		PartyA:             3038361,
 		// 1 for MSISDN 2 FOR TILL NUMBER 4 FOR ORGANISATION SHORT CODE -.
 		IdentifierType:  4,
-		Remarks:         "Churpy Balance",
+		Remarks:         "Balance",
 		QueueTimeOutURL: "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 		ResultURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 	})
@@ -123,8 +123,8 @@ func accountBalance(darajaService *daraja.DarajaService) (*daraja.AccountBalance
 // Implements business to customer payment -.
 func b2cPayment(darajaService *daraja.DarajaService) (*daraja.B2CResponseBody, error) {
 	b2cPayment, err := darajaService.B2CPayment(daraja.B2CRequestBody{
-		InitiatorName:      "churpypayapi2",
-		SecurityCredential: "m6FIrs4lHtTi8h+a347/G5/KWTWJObd+SuicTY43tQ+wPcinkuv+En82XvcYCITgT+RheQJYw2x1ICJviJhtjNM9no2eipC7Tag8C6fap7TjemT1FjPHzsgPWc3zWigBYcxijTJfVq9liUUf+hgfzlmglMmH9m7z4LaLRwIo/eAq+vHos8DC9bEPQvi2avnG2k8VsCb5R2PaQU//OTqSjfxrsRZrRdhHBjLrG8shlN+No4UhQAvBAvQl/22tUMfJjPG2SmbFcA+6o/Yr8XWV9+TRH8zimhyh86ibhERSVHst6kFYeoY7B+QIoDPvLZ2BKDyU7WP8g85HalM1slOttA==",
+		InitiatorName:      "testing",
+		SecurityCredential: "g8C6fap7TjemT1FjPHzsgPWc3zWigBYcxijTJfVq9liUUf+hgfzlmglMmH9m7z4LaLRwIo/eAq+vHos8DC9bEPQvi2avnG2k8VsCb5R2PaQU//OTqSjfxrsRZrRdhHBjLrG8shlN+No4UhQAvBAvQl/22tUMfJjPG2SmbFcA+6o/Yr8XWV9+TRH8zimhyh86ibhERSVHst6kFYeoY7B+QIoDPvLZ2BKDyU7WP8g85HalM1slOttA==",
 		CommandID:          "SalaryPayment",
 		Amount:             10,
 		PartyA:             3038361,
@@ -211,7 +211,7 @@ func darajaToken(darajaService *daraja.DarajaService) (string, error) {
 
 func queryMpesaExpressTransactionStatus(darajaService *daraja.DarajaService) (*daraja.MpesaExpressTransactionStatusQueryResponse, error) {
 	status, err := darajaService.MpesaExpressTransactionStatus(daraja.MpesaExpressTransactionStatusQueryBodyComplete{
-		BusinessShortCode: "7675771",
+		BusinessShortCode: "shortcode",
 		Password:          darajaService.ApiPassKey,
 		Timestamp:         "20230619204330",
 		CheckoutRequestID: "ws_CO_19092023131241018728922269",
@@ -230,12 +230,12 @@ func queryTransactionStatus(darajaService *daraja.DarajaService) (*daraja.Transa
 
 	status, err := darajaService.TransactionStatus(daraja.TransactionStatusRequestBody{
 		// For payout -.
-		Initiator:                "churpypayapi2",
+		Initiator:                "initiatorName",
 		SecurityCredential:       "iloJka53jHU9nDLzjiO9aysfQbRfpgWfSUue/Zy61T97jZzvxHFyiFIGcIa02pFXxKLyYqyc5RkNpmUC4IfhdPEVdMfBheayjJZY6h7qDEkNW6qql208XAjEbj5XdLB+z9+wE2J6YCGMTrwEBjYFIqgDNT8jHi7AW9ptXTzC/NTpFoQa7awrYbzwLdIeFBSOW6E1jMhxwUm7O7YE3B2l3bKVMvEkdvG0VHBAU7hAO8dRdfhTz/siEwe4LOeYt7pOyvIoMxgcXNrxle2jnXkuqPSI0gjtJnhfmuxkHSzhumNrZic+lPM0p28COXVlXG0jRtCe9cOv9cDdX3PWC6NWGw==",
 		CommandID:                "TransactionStatusQuery",
 		OriginatorConversationID: "26315-110726387-2",
 		TransactionID:            "",
-		PartyA:                   3038361,
+		PartyA:                   777771,
 		// 1 for MSISDN ,2 FOR TILL NUMBER and 4 FOR ORGANISATION SHORT CODE -.
 		IdentifierType:  4,
 		ResultURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
