@@ -15,9 +15,9 @@ gitPush: ### Command to aid in pushing code to the current branch. Runs `git add
 	./cmd/gitPush.sh
 .PHONY: gitPush
 
-mockeryGenerateBlogUsecase: ### generates testing mocks using mockery tool
+mockeryGenerateTests: ### generates testing mocks using mockery tool
 	mockery --dir=internal/entity/utilities --name=PaymentUsecase --filename=payment.go --output=internal/entity/mocks --outpkg=mocks
-.PHONY: mockeryGenerateBlogUsecase
+.PHONY: mockeryGenerateTests
 
 testCover: ### Used to run tests with coverage and display the output.Scans all the files and runs the tests if available
 	go test ./... -coverprofile=cover.out
