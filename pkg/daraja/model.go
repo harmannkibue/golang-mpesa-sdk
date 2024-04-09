@@ -56,6 +56,29 @@ type C2BSimulateResponse struct {
 	ResponseDescription     string `json:"ResponseDescription"`
 }
 
+type BusinessBuyGoodsResponse struct {
+	OriginatorConversationID string `json:"OriginatorConversationID"`
+	ConversationID           string `json:"ConversationID"`
+	ResponseCode             string `json:"ResponseCode"`
+	ResponseDescription      string `json:"ResponseDescription"`
+}
+
+type BusinessBuyGoodsRequestBody struct {
+	Initiator              string `json:"Initiator"`
+	SecurityCredential     string `json:"SecurityCredential"`
+	CommandID              string `json:"Command ID"`
+	SenderIdentifierType   string `json:"SenderIdentifierType"`
+	RecieverIdentifierType string `json:"RecieverIdentifierType"`
+	Amount                 string `json:"Amount"`
+	PartyA                 string `json:"PartyA"`
+	PartyB                 string `json:"PartyB"`
+	AccountReference       string `json:"AccountReference"`
+	Requester              string `json:"Requester"`
+	Remarks                string `json:"Remarks"`
+	QueueTimeOutURL        string `json:"QueueTimeOutURL"`
+	ResultURL              string `json:"ResultURL"`
+}
+
 // B2CRequestBody -.
 type B2CRequestBody struct {
 	InitiatorName      string `json:"InitiatorName"`

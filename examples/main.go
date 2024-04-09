@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
 )
@@ -39,63 +38,63 @@ func main() {
 	}
 	log.Printf("STKPUSH response is %+v \n", stkRes)
 
-	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
-	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
-
-	if err != nil {
-		log.Println("Error registering a URL ", err.Error())
-	}
-
-	log.Println("Register URL response code ", confirmationResponseCode)
-
-	// Simulate C2B transaction -.
-	simulateResponse, err := simulateC2BPayment(darajaService)
-
-	if err != nil {
-		log.Println("Error simulating C2B request: ", err.Error())
-	}
-
-	fmt.Printf("C2B Response: %+v \n ", simulateResponse)
-
-	balance, err := accountBalance(darajaService)
-
-	if err != nil {
-		fmt.Println("THE BALANCE ERROR ", err.Error())
-	}
-
-	fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
-
-	mpesaExpressStatus, err := queryMpesaExpressTransactionStatus(darajaService)
-
-	if err != nil {
-		log.Println("MPESA EXPRESS TRANSACTION STATUS RESPONSE ", err.Error())
-	}
-
-	log.Printf("MPESA EXPRESS TRANSACTION STATUS RESPONSE %+v \n", mpesaExpressStatus)
-
-	b2CStatus, err := queryTransactionStatus(darajaService)
-
-	if err != nil {
-		log.Println("B2C TRANSACTION STATUS RESPONSE ", err.Error())
-	}
-
-	log.Printf("B2C TRANSACTION STATUS RESPONSE %+v \n", b2CStatus)
-
-	reversal, err := reverseC2BPayment(darajaService)
-
-	if err != nil {
-		log.Println("C2B REVERSAL ERROR ", err.Error())
-	}
-
-	log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
-
-	b2cRes, err := b2cPayment(darajaService)
-
-	if err != nil {
-		log.Println("B2C error: ", err)
-	}
-
-	log.Printf("B2C response %+v \n", b2cRes)
+	//// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	//confirmationResponseCode, err := registerConfirmationUrl(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error registering a URL ", err.Error())
+	//}
+	//
+	//log.Println("Register URL response code ", confirmationResponseCode)
+	//
+	//// Simulate C2B transaction -.
+	//simulateResponse, err := simulateC2BPayment(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("Error simulating C2B request: ", err.Error())
+	//}
+	//
+	//fmt.Printf("C2B Response: %+v \n ", simulateResponse)
+	//
+	//balance, err := accountBalance(darajaService)
+	//
+	//if err != nil {
+	//	fmt.Println("THE BALANCE ERROR ", err.Error())
+	//}
+	//
+	//fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
+	//
+	//mpesaExpressStatus, err := queryMpesaExpressTransactionStatus(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("MPESA EXPRESS TRANSACTION STATUS RESPONSE ", err.Error())
+	//}
+	//
+	//log.Printf("MPESA EXPRESS TRANSACTION STATUS RESPONSE %+v \n", mpesaExpressStatus)
+	//
+	//b2CStatus, err := queryTransactionStatus(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("B2C TRANSACTION STATUS RESPONSE ", err.Error())
+	//}
+	//
+	//log.Printf("B2C TRANSACTION STATUS RESPONSE %+v \n", b2CStatus)
+	//
+	//reversal, err := reverseC2BPayment(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("C2B REVERSAL ERROR ", err.Error())
+	//}
+	//
+	//log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
+	//
+	//b2cRes, err := b2cPayment(darajaService)
+	//
+	//if err != nil {
+	//	log.Println("B2C error: ", err)
+	//}
+	//
+	//log.Printf("B2C response %+v \n", b2cRes)
 
 }
 
@@ -159,6 +158,31 @@ func simulateC2BPayment(darajaService *daraja.DarajaService) (*daraja.C2BSimulat
 	}
 
 	return simulateResponse, nil
+}
+
+// Calls the service to initiate stk push -.
+func businessBuyGoods(darajaService *daraja.DarajaService) (*daraja.BusinessBuyGoodsResponse, error) {
+	buyGoodsRes, err := darajaService.BusinessBuyGoods(daraja.BusinessBuyGoodsRequestBody{
+		Initiator:              "API_Usename",
+		SecurityCredential:     "FKXl/KPzT8hFOnozI+unz7mXDgTRbrlrZ+C1Vblxpbz7jliLAFa0E/…../uO4gzUkABQuCxAeq+0Hd0A==",
+		CommandID:              "BusinessBuyGoods",
+		SenderIdentifierType:   "4",
+		RecieverIdentifierType: "4",
+		Amount:                 "239",
+		PartyA:                 "123456",
+		PartyB:                 "000000",
+		AccountReference:       "353353",
+		Requester:              "254700000000",
+		Remarks:                "OK",
+		QueueTimeOutURL:        "https://mydomain.com/b2b/businessbuygoods/queue/",
+		ResultURL:              "https://mydomain.com/b2b/businessbuygoods/result/",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return buyGoodsRes, nil
 }
 
 // Calls the service to initiate stk push -.
