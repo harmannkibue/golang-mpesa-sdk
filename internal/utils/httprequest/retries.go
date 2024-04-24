@@ -82,9 +82,9 @@ func (h HttpRequest) analyseRespErrors(req *http.Request, resp *http.Response) (
 	// The status code is withing the 400-499 range and thus contains error message -.
 	if resp.StatusCode >= 400 && resp.StatusCode < 500 && resp.StatusCode != 429 {
 		processedResponse = nil
-		err = fmt.Errorf("failed with status code %d", resp.StatusCode)
+		err = fmt.Errorf("\nfailed with status code %d \n", resp.StatusCode)
 	} else if resp.StatusCode < 400 {
-		log.Printf("SUCCESSFULLY SENT REQUEST TO %s", req.URL)
+		log.Printf("\nSUCCESSFULLY SENT REQUEST TO %s \n", req.URL)
 		processedResponse = resp
 		err = nil
 

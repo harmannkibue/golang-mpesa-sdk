@@ -24,7 +24,8 @@ func (s DarajaService) BusinessBuyGoods(b2cBody BusinessBuyGoodsRequestBody) (*B
 	headers["Authorization"] = "Bearer " + token
 	headers["Cache-Control"] = "no-cache"
 
-	url := s.baseURL() + "/mpesa/b2b/v1/paymentrequest"
+	url := s.baseURL() + "mpesa/b2b/v1/paymentrequest"
+	//url := "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920/" + "mpesa/b2b/v1/paymentrequest"
 
 	response, err := s.HttpRequest.PerformPost(httprequest.RequestDataParams{
 		Endpoint: url,
@@ -38,12 +39,12 @@ func (s DarajaService) BusinessBuyGoods(b2cBody BusinessBuyGoodsRequestBody) (*B
 	}
 
 	// Unmarshal the response body into the Business buy goods struct -.
-	var b2cResponse BusinessBuyGoodsResponse
-	err = json.NewDecoder(response.Body).Decode(&b2cResponse)
+	var buyGoodsResponse BusinessBuyGoodsResponse
+	err = json.NewDecoder(response.Body).Decode(&buyGoodsResponse)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &b2cResponse, nil
+	return &buyGoodsResponse, nil
 }

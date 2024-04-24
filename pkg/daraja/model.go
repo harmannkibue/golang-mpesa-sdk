@@ -66,7 +66,7 @@ type BusinessBuyGoodsResponse struct {
 type BusinessBuyGoodsRequestBody struct {
 	Initiator              string `json:"Initiator"`
 	SecurityCredential     string `json:"SecurityCredential"`
-	CommandID              string `json:"Command ID"`
+	CommandID              string `json:"CommandID"`
 	SenderIdentifierType   string `json:"SenderIdentifierType"`
 	RecieverIdentifierType string `json:"RecieverIdentifierType"`
 	Amount                 string `json:"Amount"`
