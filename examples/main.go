@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
 	"log"
 )
@@ -30,13 +31,13 @@ func main() {
 
 	log.Println("Daraja Token ", token)
 
-	////Implements stk push service -.
-	//stkRes, err := initiateStkPush(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error in stk push initiation ", err.Error())
-	//}
-	//log.Printf("STKPUSH response is %+v \n", stkRes)
+	//Implements stk push service -.
+	stkRes, err := initiateStkPush(darajaService)
+
+	if err != nil {
+		log.Println("Error in stk push initiation ", err.Error())
+	}
+	log.Printf("STKPUSH response is %+v \n", stkRes)
 
 	// Implements transfer of funds from your business account to till, merchant store or merchant HO -.
 	buyGoodsRes, err := businessBuyGoods(darajaService)
@@ -46,63 +47,63 @@ func main() {
 	}
 	log.Printf("Business Buy Goods response is %+v \n", buyGoodsRes)
 
-	//// Implements registering a confirmation and validation url.If response code is zero then it passed -.
-	//confirmationResponseCode, err := registerConfirmationUrl(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error registering a URL ", err.Error())
-	//}
-	//
-	//log.Println("Register URL response code ", confirmationResponseCode)
-	//
-	//// Simulate C2B transaction -.
-	//simulateResponse, err := simulateC2BPayment(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("Error simulating C2B request: ", err.Error())
-	//}
-	//
-	//fmt.Printf("C2B Response: %+v \n ", simulateResponse)
-	//
-	//balance, err := accountBalance(darajaService)
-	//
-	//if err != nil {
-	//	fmt.Println("THE BALANCE ERROR ", err.Error())
-	//}
-	//
-	//fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
-	//
-	//mpesaExpressStatus, err := queryMpesaExpressTransactionStatus(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("MPESA EXPRESS TRANSACTION STATUS RESPONSE ", err.Error())
-	//}
-	//
-	//log.Printf("MPESA EXPRESS TRANSACTION STATUS RESPONSE %+v \n", mpesaExpressStatus)
-	//
-	//b2CStatus, err := queryTransactionStatus(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("B2C TRANSACTION STATUS RESPONSE ", err.Error())
-	//}
-	//
-	//log.Printf("B2C TRANSACTION STATUS RESPONSE %+v \n", b2CStatus)
-	//
-	//reversal, err := reverseC2BPayment(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("C2B REVERSAL ERROR ", err.Error())
-	//}
-	//
-	//log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
-	//
-	//b2cRes, err := b2cPayment(darajaService)
-	//
-	//if err != nil {
-	//	log.Println("B2C error: ", err)
-	//}
-	//
-	//log.Printf("B2C response %+v \n", b2cRes)
+	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
+	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
+
+	if err != nil {
+		log.Println("Error registering a URL ", err.Error())
+	}
+
+	log.Println("Register URL response code ", confirmationResponseCode)
+
+	// Simulate C2B transaction -.
+	simulateResponse, err := simulateC2BPayment(darajaService)
+
+	if err != nil {
+		log.Println("Error simulating C2B request: ", err.Error())
+	}
+
+	fmt.Printf("C2B Response: %+v \n ", simulateResponse)
+
+	balance, err := accountBalance(darajaService)
+
+	if err != nil {
+		fmt.Println("THE BALANCE ERROR ", err.Error())
+	}
+
+	fmt.Printf("THE BALANCE RESPONSE %+v \n", balance)
+
+	mpesaExpressStatus, err := queryMpesaExpressTransactionStatus(darajaService)
+
+	if err != nil {
+		log.Println("MPESA EXPRESS TRANSACTION STATUS RESPONSE ", err.Error())
+	}
+
+	log.Printf("MPESA EXPRESS TRANSACTION STATUS RESPONSE %+v \n", mpesaExpressStatus)
+
+	b2CStatus, err := queryTransactionStatus(darajaService)
+
+	if err != nil {
+		log.Println("B2C TRANSACTION STATUS RESPONSE ", err.Error())
+	}
+
+	log.Printf("B2C TRANSACTION STATUS RESPONSE %+v \n", b2CStatus)
+
+	reversal, err := reverseC2BPayment(darajaService)
+
+	if err != nil {
+		log.Println("C2B REVERSAL ERROR ", err.Error())
+	}
+
+	log.Printf("C2B REVERSAL RESPONSE %+v \n ", reversal)
+
+	b2cRes, err := b2cPayment(darajaService)
+
+	if err != nil {
+		log.Println("B2C error: ", err)
+	}
+
+	log.Printf("B2C response %+v \n", b2cRes)
 
 }
 
