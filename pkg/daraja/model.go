@@ -56,16 +56,17 @@ type C2BSimulateResponse struct {
 	ResponseDescription     string `json:"ResponseDescription"`
 }
 
-type BusinessBuyGoodsResponse struct {
+type BusinessToBusinessResponse struct {
 	OriginatorConversationID string `json:"OriginatorConversationID"`
 	ConversationID           string `json:"ConversationID"`
 	ResponseCode             string `json:"ResponseCode"`
 	ResponseDescription      string `json:"ResponseDescription"`
 }
 
-type BusinessBuyGoodsRequestBody struct {
-	Initiator              string `json:"Initiator"`
-	SecurityCredential     string `json:"SecurityCredential"`
+type BusinessToBusinessRequestBody struct {
+	Initiator          string `json:"Initiator"`
+	SecurityCredential string `json:"SecurityCredential"`
+	// Use BusinessBuyGoods for sending to till and BusinessPayBill for sending to pay bill -.
 	CommandID              string `json:"CommandID"`
 	SenderIdentifierType   string `json:"SenderIdentifierType"`
 	RecieverIdentifierType string `json:"RecieverIdentifierType"`

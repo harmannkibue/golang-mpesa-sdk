@@ -31,22 +31,6 @@ func main() {
 
 	log.Println("Daraja Token ", token)
 
-	//Implements stk push service -.
-	stkRes, err := initiateStkPush(darajaService)
-
-	if err != nil {
-		log.Println("Error in stk push initiation ", err.Error())
-	}
-	log.Printf("STKPUSH response is %+v \n", stkRes)
-
-	// Implements transfer of funds from your business account to till, merchant store or merchant HO -.
-	buyGoodsRes, err := businessBuyGoods(darajaService)
-
-	if err != nil {
-		log.Println("Error in doing business buy goods payment ", err.Error())
-	}
-	log.Printf("Business Buy Goods response is %+v \n", buyGoodsRes)
-
 	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
 	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
 
@@ -55,6 +39,33 @@ func main() {
 	}
 
 	log.Println("Register URL response code ", confirmationResponseCode)
+
+	//Implements stk push service -.
+	stkRes, err := initiateStkPush(darajaService)
+
+	if err != nil {
+		log.Println("Error in stk push initiation ", err.Error())
+	}
+
+	log.Printf("STKPUSH response is %+v \n", stkRes)
+
+	// Implements transfer of funds from your business account to till, merchant store or merchant HO -.
+	buyGoodsRes, err := businessBuyGoodsPayment(darajaService)
+
+	if err != nil {
+		log.Println("Error in doing business buy goods payment ", err.Error())
+	}
+
+	log.Printf("Business Buy Goods response is %+v \n", buyGoodsRes)
+
+	// Implements transfer of funds from your business account to paybill, merchant store or merchant HO -.
+	businessPayBillRes, err := businessPayBillPayment(darajaService)
+
+	if err != nil {
+		log.Println("Error in doing business pay bill payment ", err.Error())
+	}
+
+	log.Printf("Business pay bill response is %+v \n", businessPayBillRes)
 
 	// Simulate C2B transaction -.
 	simulateResponse, err := simulateC2BPayment(darajaService)
@@ -137,7 +148,7 @@ func b2cPayment(darajaService *daraja.DarajaService) (*daraja.B2CResponseBody, e
 		CommandID:          "SalaryPayment",
 		Amount:             10,
 		PartyA:             31111,
-		PartyB:             254728922269,
+		PartyB:             254728922267,
 		Remarks:            "Payment from Business",
 		QueueTimeOutURL:    "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 		ResultURL:          "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
@@ -168,18 +179,44 @@ func simulateC2BPayment(darajaService *daraja.DarajaService) (*daraja.C2BSimulat
 	return simulateResponse, nil
 }
 
-// Calls the service to initiate stk push -.
-func businessBuyGoods(darajaService *daraja.DarajaService) (*daraja.BusinessBuyGoodsResponse, error) {
-	buyGoodsResponse, err := darajaService.BusinessBuyGoods(daraja.BusinessBuyGoodsRequestBody{
-		Initiator:          "intiatorUsername",
+// Calls the service to initiate payment from business account to till number -.
+func businessBuyGoodsPayment(darajaService *daraja.DarajaService) (*daraja.BusinessToBusinessResponse, error) {
+	buyGoodsResponse, err := darajaService.BusinessToBusinessPayment(daraja.BusinessToBusinessRequestBody{
+		Initiator:          "initiatorUsername",
 		SecurityCredential: "credential value",
 		// Business buy goods from short code e.g. B2C
 		CommandID:              "BusinessBuyGoods",
 		SenderIdentifierType:   "4",
 		RecieverIdentifierType: "2",
 		Amount:                 "10",
-		PartyA:                 "shortcode",
-		PartyB:                 "till number",
+		PartyA:                 "sourceOfFundsShortcode",
+		PartyB:                 "destinationShortCode",
+		AccountReference:       "22267",
+		Requester:              "25472892267",
+		Remarks:                "OK",
+		QueueTimeOutURL:        "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920",
+		ResultURL:              "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return buyGoodsResponse, nil
+}
+
+// Calls the service to initiate payment from business account to pay bill number -.
+func businessPayBillPayment(darajaService *daraja.DarajaService) (*daraja.BusinessToBusinessResponse, error) {
+	buyGoodsResponse, err := darajaService.BusinessToBusinessPayment(daraja.BusinessToBusinessRequestBody{
+		Initiator:          "initiatorUsername",
+		SecurityCredential: "credential value",
+		// Business payment to pay bill from short code e.g. B2C -.
+		CommandID:              "BusinessPayBill",
+		SenderIdentifierType:   "4",
+		RecieverIdentifierType: "4",
+		Amount:                 "10",
+		PartyA:                 "sourceOfFundsShortcode",
+		PartyB:                 "destinationShortCode",
 		AccountReference:       "22267",
 		Requester:              "25472892267",
 		Remarks:                "OK",
@@ -201,9 +238,9 @@ func initiateStkPush(darajaService *daraja.DarajaService) (*daraja.StkPushRespon
 		BusinessShortCode: "7675771",
 		TransactionType:   "CustomerBuyGoodsOnline",
 		Amount:            "1",
-		PartyA:            "254728922269",
+		PartyA:            "254728922267",
 		PartyB:            "5706975",
-		PhoneNumber:       "254728922269",
+		PhoneNumber:       "254728922267",
 		CallBackURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
 		AccountReference:  "999200200",
 		TransactionDesc:   "Daraja sdk testing STK push",

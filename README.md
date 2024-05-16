@@ -65,7 +65,7 @@ func main() {
 		Amount:            "1",
 		PartyA:            "254728922469",
 		PartyB:            "174379",
-		PhoneNumber:       "254728922269",
+		PhoneNumber:       "254728922267",
 		CallBackURL:       "https://webhook.site/7da5ccfd-3a90-4038-b822-273887b3de7f",
 		AccountReference:  "999200200",
 		TransactionDesc:   "Daraja sdk testing STK push",
@@ -250,6 +250,104 @@ func main() {
 	}
 	log.Printf("Status response %+v \n", statusResponse)
 
+}
+```
+
+### Business Pay Bill payment
+This api allows you to do M-Pesa Transaction from company business account to a pay bill number.
+
+```go
+package main
+
+import (
+	"log"
+	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
+)
+
+const (
+	mpesaApiKey         = "CAmGHG070hAlXgGkbA3CZDQEEXapvmmT"
+	mpesaConsumerSecret = "PJ7Wet8fMBLu42Xw"
+	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+)
+
+func main() {
+
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
+
+	if err != nil {
+		log.Println("failed initializing safaricom daraja client ", err)
+	}
+
+	businessPayBill, err := darajaService.BusinessToBusinessPayment(daraja.BusinessToBusinessRequestBody{
+		Initiator:          "initiatorUsername",
+		SecurityCredential: "credential value",
+		// Business pay bill from short code -.
+		CommandID:              "BusinessPayBill",
+		SenderIdentifierType:   "4",
+		RecieverIdentifierType: "4",
+		Amount:                 "10",
+		PartyA:                 "sourceOfFundsShortcode",
+		PartyB:                 "destinationShortCode",
+		AccountReference:       "22267",
+		Requester:              "25472892267",
+		Remarks:                "OK",
+		QueueTimeOutURL:        "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920",
+		ResultURL:              "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920",
+	})
+
+	if err != nil {
+		log.Println("B2C error: ", err)
+	}
+	log.Printf("Business pay bill response %+v \n", businessPayBill)
+}
+```
+
+### Business Buy Goods payment
+This api allows you to do M-Pesa Transaction from company business account to a till number.
+
+```go
+package main
+
+import (
+	"log"
+	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
+)
+
+const (
+	mpesaApiKey         = "CAmGHG070hAlXgGkbA3CZDQEEXapvmmT"
+	mpesaConsumerSecret = "PJ7Wet8fMBLu42Xw"
+	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+)
+
+func main() {
+
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
+
+	if err != nil {
+		log.Println("failed initializing safaricom daraja client ", err)
+	}
+
+	businessBuyGoodsResponse, err := darajaService.BusinessToBusinessPayment(daraja.BusinessToBusinessRequestBody{
+		Initiator:          "initiatorUsername",
+		SecurityCredential: "credential value",
+		// Business buy goods from business account -.
+		CommandID:              "BusinessBuyGoods",
+		SenderIdentifierType:   "4",
+		RecieverIdentifierType: "2",
+		Amount:                 "10",
+		PartyA:                 "sourceOfFundsShortcode",
+		PartyB:                 "destinationShortCode",
+		AccountReference:       "22267",
+		Requester:              "25472892267",
+		Remarks:                "OK",
+		QueueTimeOutURL:        "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920",
+		ResultURL:              "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920",
+	})
+
+	if err != nil {
+		log.Println("B2C error: ", err)
+	}
+	log.Printf("Business buy goods response %+v \n", businessBuyGoodsResponse)
 }
 ```
 

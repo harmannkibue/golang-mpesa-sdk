@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -98,7 +97,7 @@ func (h HttpRequest) analyseRespErrors(req *http.Request, resp *http.Response) (
 
 // copyBody Copying the body so that the original body with resources can be released -.
 func (h HttpRequest) copyBody(src io.ReadCloser) ([]byte, error) {
-	b, err := ioutil.ReadAll(src)
+	b, err := io.ReadAll(src)
 
 	if err != nil {
 		return nil, errors.New("error reading the request body")

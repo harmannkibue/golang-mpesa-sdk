@@ -27,19 +27,18 @@ func New(Key string, expires time.Duration) ICache {
 // GetCacheValue Fetching the cache token value -.
 func (p *CacheParams) GetCacheValue() (string, error) {
 
-	// Get a value from the cache
+	// Get a value from the cache -.
 	value, found := p.Cache.Get(p.Key)
+
 	if found {
 		return value.(string), nil
 	} else {
 		return "", fmt.Errorf("key not found in cache")
 	}
-
 }
 
 // SetCacheValue Set the cache value -.
 func (p *CacheParams) SetCacheValue(cacheValue string) error {
-
 	// Set a value in the cache -.
 	p.Cache.Set(p.Key, cacheValue, p.ExpiresIn)
 
