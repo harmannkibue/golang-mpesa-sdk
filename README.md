@@ -159,53 +159,6 @@ func main() {
 }
 ```
 
-
-```go
-package main
-
-import (
-	"log"
-	"github.com/harmannkibue/golang-mpesa-sdk/pkg/daraja"
-)
-
-const (
-	mpesaApiKey         = "CAmGHG070hAlXgGkbA3CZDQEEXapvmmT"
-	mpesaConsumerSecret = "PJ7Wet8fMBLu42Xw"
-	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
-)
-
-func main() {
-
-	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
-
-	if err != nil {
-		log.Println("failed initializing safaricom daraja client ", err)
-	}
-
-	buyGoodsResponse, err := darajaService.BusinessBuyGoods(daraja.BusinessBuyGoodsRequestBody{
-		Initiator:          "intiatorUsername",
-		SecurityCredential: "credential value",
-		// Business buy goods from short code e.g. B2C
-		CommandID:              "BusinessBuyGoods",
-		SenderIdentifierType:   "4",
-		RecieverIdentifierType: "2",
-		Amount:                 "10",
-		PartyA:                 "shortcode",
-		PartyB:                 "till number",
-		AccountReference:       "22267",
-		Requester:              "25472892267",
-		Remarks:                "OK",
-		QueueTimeOutURL:        "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920",
-		ResultURL:              "https://webhook.site/996ed649-244a-4285-85c4-ab0bac869920",
-	})
-
-	if err != nil {
-		log.Println("Error performing Business buy goods api: ", err)
-	}
-    log.Printf("Simulate response %+v \n", buyGoodsResponse)
-}
-```
-
 ### Transaction Status
 This api allows you to track transaction status for payments.
 
