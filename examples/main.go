@@ -8,9 +8,9 @@ import (
 
 const (
 	// Set environment variables for daraja before testing. Here I am using sandbox settings-.
-	mpesaPassKey        = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
-	mpesaApiKey         = "YCWLzwRKndyK7Il3NbyshtxJHZ9aYjTGEkjwdj0NpET46kAo"
-	mpesaConsumerSecret = "Ar7cNir15oZdA9F5YVr8AMiF57Lb7errEmtR10OdRwrAXudTDAWDB0Aa12hGI5bR"
+	mpesaPassKey        = "mpesa key value"
+	mpesaApiKey         = "api key value"
+	mpesaConsumerSecret = "secret value"
 )
 
 func main() {
