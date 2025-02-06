@@ -16,7 +16,7 @@ const (
 func main() {
 	// Initialize daraja service. PassKey is provided on your portal for sandbox,
 	// while it is shared on your go live email from apisupport@safaricom.co.ke
-	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.PRODUCTION)
+	darajaService, err := daraja.New(mpesaApiKey, mpesaConsumerSecret, mpesaPassKey, daraja.SANDBOX)
 
 	if err != nil {
 		log.Println("failed initializing safaricom daraja client ", err)
@@ -31,6 +31,14 @@ func main() {
 
 	log.Println("Daraja Token ", token)
 
+	mpesaRatiba, err := initiateMpesaRatiba(darajaService)
+
+	if err != nil {
+		log.Println("Error initiate mpesa ratiba standing order ", err.Error())
+	}
+
+	log.Printf("MRATIBA response is %+v \n", mpesaRatiba)
+
 	// Implements registering a confirmation and validation url.If response code is zero then it passed -.
 	confirmationResponseCode, err := registerConfirmationUrl(darajaService)
 
@@ -40,7 +48,7 @@ func main() {
 
 	log.Println("Register URL response code ", confirmationResponseCode)
 
-	//Implements stk push service -.
+	// Implements stk push service -.
 	stkRes, err := initiateStkPush(darajaService)
 
 	if err != nil {
@@ -116,6 +124,33 @@ func main() {
 
 	log.Printf("B2C response %+v \n", b2cRes)
 
+}
+
+// Request customer to approve mpesa ratiba standing order for given details in the request for reoccurring payments -.
+func initiateMpesaRatiba(darajaService *daraja.DarajaService) (*daraja.MpesaRatibaRequestResponseBody, error) {
+
+	ratibaResponse, err := darajaService.InitiateMpesaRatibaRequest(daraja.MpesaRatibaRequestBody{
+		StandingOrderName: "Test standing order",
+		// This should be from an enum type for values 2 for Till or 4 for Pay Bill-.
+		ReceiverPartyIdentifierType: daraja.ReceiverPartyBusinessShortCode,
+		// This should be from an enum type Standing Order Customer Pay Bill and Standing Order Customer Pay Merchant -.
+		TransactionType:   daraja.TransactionTypePayBill,
+		BusinessShortCode: "174379",
+		PartyA:            "254728922267",
+		Amount:            "1",
+		StartDate:         "20250206",
+		EndDate:           "20250207",
+		Frequency:         "2",
+		AccountReference:  "Test mpesa ratiba",
+		TransactionDesc:   "Test",
+		CallBackURL:       "https://webhook.site/7732c802-1c21-4b42-8f22-fc1873a07c82",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ratibaResponse, nil
 }
 
 // checking account balance for both B2C and C2B short codes -.
@@ -235,13 +270,13 @@ func businessPayBillPayment(darajaService *daraja.DarajaService) (*daraja.Busine
 func initiateStkPush(darajaService *daraja.DarajaService) (*daraja.StkPushResponse, error) {
 	// "CustomerPayBillOnline" for PayBill Numbers and "CustomerBuyGoodsOnline" for Till Numbers.
 	stkRes, err := darajaService.InitiateStkPush(daraja.STKPushBody{
-		BusinessShortCode: "7675771",
-		TransactionType:   "CustomerBuyGoodsOnline",
+		BusinessShortCode: "174379",
+		TransactionType:   "CustomerPayBillOnline",
 		Amount:            "1",
 		PartyA:            "254728922267",
-		PartyB:            "5706975",
+		PartyB:            "174379",
 		PhoneNumber:       "254728922267",
-		CallBackURL:       "https://webhook.site/bbca16b1-fc3b-4a9f-9a91-14c08972657e",
+		CallBackURL:       "https://webhook.site/7732c802-1c21-4b42-8f22-fc1873a07c82",
 		AccountReference:  "999200200",
 		TransactionDesc:   "Daraja sdk testing STK push",
 	})
