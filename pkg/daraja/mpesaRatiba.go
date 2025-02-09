@@ -46,21 +46,21 @@ type MpesaRatibaRequestResponseBody struct {
 }
 
 // InitiateMpesaRatibaRequest Initiate an Mpesa Ratiba standing order to customer -.
-func (s DarajaService) InitiateMpesaRatibaRequest(stkRequest MpesaRatibaRequestBody) (*MpesaRatibaRequestResponseBody, error) {
+func (s DarajaService) InitiateMpesaRatibaRequest(ratibaRequest MpesaRatibaRequestBody) (*MpesaRatibaRequestResponseBody, error) {
 
 	body, err := json.Marshal(MpesaRatibaRequestBody{
-		StandingOrderName:           stkRequest.StandingOrderName,
-		ReceiverPartyIdentifierType: stkRequest.ReceiverPartyIdentifierType,
-		BusinessShortCode:           stkRequest.BusinessShortCode,
-		TransactionType:             stkRequest.TransactionType,
-		PartyA:                      stkRequest.PartyA,
-		Amount:                      stkRequest.Amount,
-		StartDate:                   stkRequest.StartDate,
-		EndDate:                     stkRequest.EndDate,
-		Frequency:                   stkRequest.Frequency,
-		AccountReference:            stkRequest.AccountReference,
-		TransactionDesc:             stkRequest.TransactionDesc,
-		CallBackURL:                 stkRequest.CallBackURL,
+		StandingOrderName:           ratibaRequest.StandingOrderName,
+		ReceiverPartyIdentifierType: ratibaRequest.ReceiverPartyIdentifierType,
+		BusinessShortCode:           ratibaRequest.BusinessShortCode,
+		TransactionType:             ratibaRequest.TransactionType,
+		PartyA:                      ratibaRequest.PartyA,
+		Amount:                      ratibaRequest.Amount,
+		StartDate:                   ratibaRequest.StartDate,
+		EndDate:                     ratibaRequest.EndDate,
+		Frequency:                   ratibaRequest.Frequency,
+		AccountReference:            ratibaRequest.AccountReference,
+		TransactionDesc:             ratibaRequest.TransactionDesc,
+		CallBackURL:                 ratibaRequest.CallBackURL,
 	})
 
 	if err != nil {
